@@ -1,5 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
+import robodk as rdk
 
 ROBOT = 'robot'
 SILVIA2ROBOT = 'SILVIA2ROBOT'
@@ -19,7 +19,11 @@ class ReferenceFrame:
         self.rotation = np.array([[1, 0, 0],
                                   [0, 1, 0],
                                   [0, 0, 1]])
-        self.transform = np.array([[1, 0, 0, 0],
+        self.transform_np = np.array([[1, 0, 0, 0],
+                                   [0, 1, 0, 0],
+                                   [0, 0, 1, 0],
+                                   [0, 0, 0, 1]])
+        self.transform = rdk.Mat([[1, 0, 0, 0],
                                    [0, 1, 0, 0],
                                    [0, 0, 1, 0],
                                    [0, 0, 0, 1]])
