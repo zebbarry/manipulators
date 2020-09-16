@@ -19,6 +19,6 @@ angle = acos(dot(xb, xa))
 angle = deg2rad(-7.5);
 
 transform = [cos(angle) 0 -sin(angle);
-             sin(angle) 1 0;
-             0 0 cos(angle)]
+             0 1 0;
+             sin(angle) 0 cos(angle)]
          
