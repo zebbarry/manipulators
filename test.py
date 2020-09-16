@@ -9,23 +9,8 @@ import numpy as np
 from reference_frames import *
 
 filename = 'reference_frames.csv'
-file = open(filename, 'r')
-lines = file.readlines()
-file.close()
 
-frames = {}
-for line in lines:
-    segments = line.rstrip().split(',')
-    if len(segments) > 4:
-        name, x, y, z, a, b, c = segments
-        frames[name] = ReferenceFrame(np.array([float(x), float(y), float(z)]),
-                                        label=name, ref_point=np.array([float(a), float(b), float(c)]))
-    else:
-        name, x, y, z = segments
-        frames[name] = ReferenceFrame(np.array([float(x), float(y), float(z)]),
-                                        label=name)
-
-frames = calc_reference_frames(frames)
+frames = read_frames(filename)
 
 RDK = rl.Robolink()
 
@@ -59,7 +44,7 @@ T_grinderapproach = rdk.Mat(T_grinderapproach_np.tolist())
 
 robot.MoveJ(T_home, blocking=True)
 # robot.MoveJ(J_intermediatepoint, blocking=True)
-robot.MoveL(frames['cup'].transform, blocking=True)
+robot.MoveL(frames[GLOBAL+CUP].transform, blocking=True)
 
 # grinder_tool_attach.RunCode(grinder_tool_attach) # call subprogram
 # rdk.pause(3)  # to allow subprogram to complete

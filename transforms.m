@@ -1,6 +1,6 @@
 close all; clear; clc;
 
-origin = [599.13, 0.0, 211.07];
+origin = [4.71, 0, 144.76];
 reference = [660, 68.77, 156.07];
 vector = flip(reference - origin);
 
@@ -15,9 +15,10 @@ xa = [1 0 0];
 ya = [0 1 0];
 za = [0 0 1];
 xb = axis_norm;
-angle = acos(dot(xb, xa)) + pi
+angle = acos(dot(xb, xa))
+angle = deg2rad(-7.5);
 
-transform = [cos(angle) -sin(angle) 0;
-             sin(angle) cos(angle) 0;
-             0 0 1]
+transform = [cos(angle) 0 -sin(angle);
+             sin(angle) 1 0;
+             0 0 cos(angle)]
          

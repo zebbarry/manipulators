@@ -45,13 +45,13 @@ robot.MoveJ(J_intermediatepoint, blocking=True)
 robot.MoveL(T_grinderapproach, blocking=True)
 
 grinder_tool_attach.RunCode(grinder_tool_attach) # call subprogram
-rdk.pause(3)  # to allow subprogram to complete
+rdk.pause(30)  # to allow subprogram to complete
 grinder_tool_detach.RunCode(grinder_tool_detach) # call subfunction
 
 # The following pause is very important - if it is not present, or long enough
 # the frame reset below it occurs before the subprogram completes and this
 # causes problems...
-rdk.pause(3)    
+rdk.pause(30)
 # Note, the subfunctions change the reference frame, so you need to change it back
 # after calling them
 robot.setPoseFrame(world_frame)
