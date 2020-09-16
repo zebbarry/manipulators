@@ -1,9 +1,5 @@
-import numpy as np
 import matplotlib.pyplot as plt
 from reference_frames import *
-from robolink import *    # RoboDK API
-from robodk import *      # Robot toolbox
-import matplotlib as plt
 
 
 def plot_scene(frames, test_points):
@@ -33,25 +29,25 @@ def plot_scene(frames, test_points):
                      '-g')
 
     # Silvia
-    plt.plot([frames[SILVIA2ROBOT].ref_point[0]],
-             [frames[SILVIA2ROBOT].ref_point[1]],
-             'ob')
+    # plt.plot([frames[SILVIA2ROBOT].ref_point[0]],
+    #          [frames[SILVIA2ROBOT].ref_point[1]],
+    #          'ob')
     plt.plot([silvia_robot_point[0]],
              [silvia_robot_point[1]],
              '+', color='orange')
 
     # Grinder
-    plt.plot([frames[GRINDER2ROBOT].ref_point[0]],
-             [frames[GRINDER2ROBOT].ref_point[1]],
-             'ob')
+    # plt.plot([frames[GRINDER2ROBOT].ref_point[0]],
+    #          [frames[GRINDER2ROBOT].ref_point[1]],
+    #          'ob')
     plt.plot([grinder_robot_point[0]],
              [grinder_robot_point[1]],
              '+', color='orange')
 
     # Scraper
-    plt.plot([frames[SCRAPER2ROBOT].ref_point[0]],
-             [frames[SCRAPER2ROBOT].ref_point[1]],
-             'ob')
+    # plt.plot([frames[SCRAPER2ROBOT].ref_point[0]],
+    #          [frames[SCRAPER2ROBOT].ref_point[1]],
+    #          'ob')
     plt.plot([scraper_robot_point[0]],
              [scraper_robot_point[1]],
              '+', color='orange')
@@ -67,16 +63,15 @@ def main():
     frames = {}
     for line in lines:
         segments = line.rstrip().split(',')
-        if len(segments) > 4:
-            name, x, y, z, a, b, c = segments
-            frames[name] = ReferenceFrame(np.array([float(x), float(y), float(z)]),
-                                          label=name, ref_point=np.array([float(a), float(b), float(c)]))
-        else:
-            name, x, y, z = segments
-            frames[name] = ReferenceFrame(np.array([float(x), float(y), float(z)]),
-                                          label=name)
+        name = segments[0]
+        values = [float(i) for i in segments[1:]]
+        transform = np.array([values[0:4],
+                              values[4:8],
+                              values[8:12],
+                              values[12:16]])
+        frames[name] = ReferenceFrame(transform,
+                                      label=name)
 
-    frames = calc_reference_frames(frames)
 
     # print(frames['silvia'].transform)
     # print(frames['grinder'].transform)
@@ -84,11 +79,11 @@ def main():
     # print(frames['cup'].transform)
 
     silvia_frame_point = np.array([0, 218, 0, 1])
-    silvia_robot_point = np.matmul(frames['silvia'].transform, silvia_frame_point)
+    silvia_robot_point = np.matmul(frames[SILVIA2ROBOT].transform_np, silvia_frame_point)
     grinder_frame_point = np.array([157.61, 0, -250.45, 1])
-    grinder_robot_point = np.matmul(frames['grinder'].transform, grinder_frame_point)
+    grinder_robot_point = np.matmul(frames[GRINDER2ROBOT].transform_np, grinder_frame_point)
     scraper_frame_point = np.array([-80, 0, -55, 1])
-    scraper_robot_point = np.matmul(frames['scraper'].transform, scraper_frame_point)
+    scraper_robot_point = np.matmul(frames[SCRAPER2ROBOT].transform_np, scraper_frame_point)
 
     test_points = [silvia_robot_point, grinder_robot_point, scraper_robot_point]
     plot_scene(frames, test_points)

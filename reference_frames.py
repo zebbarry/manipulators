@@ -2,31 +2,22 @@ import numpy as np
 import robodk as rdk
 
 ROBOT = 'robot'
-SILVIA2ROBOT = 'SILVIA2ROBOT'
-GRINDER2ROBOT = 'GRINDER2ROBOT'
-CUP2ROBOT = 'CUP2ROBOT'
-TOOLS2ROBOT = 'TOOLS2ROBOT'
-SCRAPER2ROBOT = 'SCRAPER2ROBOT'
-TOOL2TCP = 'TOOL2TCP'
+SILVIA2ROBOT = 'silvia2robot'
+GRINDER2ROBOT = 'grinder2robot'
+CUP2ROBOT = 'cup2robot'
+TOOLS2ROBOT = 'tools2robot'
+SCRAPER2ROBOT = 'scraper2robot'
+TOOL2TCP = 'tool2tcp'
 
 
 class ReferenceFrame:
 
-    def __init__(self, origin, label='N/A', ref_point=None):
-        self.position = origin
+    def __init__(self, transform, label='N/A'):
+        self.position = np.array([val[3] for val in transform[:3]])
         self.label = label
-        self.ref_point = ref_point
-        self.rotation = np.array([[1, 0, 0],
-                                  [0, 1, 0],
-                                  [0, 0, 1]])
-        self.transform_np = np.array([[1, 0, 0, 0],
-                                   [0, 1, 0, 0],
-                                   [0, 0, 1, 0],
-                                   [0, 0, 0, 1]])
-        self.transform = rdk.Mat([[1, 0, 0, 0],
-                                   [0, 1, 0, 0],
-                                   [0, 0, 1, 0],
-                                   [0, 0, 0, 1]])
+        self.rotation = np.array([val[:3] for val in transform[:3]])
+        self.transform_np = transform
+        self.transform = rdk.Mat(self.transform_np.tolist())
 
     def calc_angle(self):
         diff = self.ref_point - self.position
@@ -40,8 +31,9 @@ class ReferenceFrame:
         return x_axis, y_axis
 
     def calc_transform(self):
-        self.transform = np.column_stack([self.rotation, self.position])
-        self.transform = np.vstack((self.transform, np.array([0, 0, 0, 1])))
+        self.transform_np = np.column_stack([self.rotation, self.position])
+        self.transform_np = np.vstack((self.transform, np.array([0, 0, 0, 1])))
+        self.transform = rdk.Mat(self.transform_np.tolist())
 
 
 def calc_reference_frames(frames):
@@ -57,16 +49,16 @@ def calc_reference_frames(frames):
 
     angle = frames[SCRAPER2ROBOT].calc_angle()
     frames[SCRAPER2ROBOT].rotation = np.array([[np.cos(angle), -np.sin(angle), 0],
-                                           [np.sin(angle), -np.cos(angle), 0],
-                                           [0, 0, 1]])
+                                               [np.sin(angle), np.cos(angle), 0],
+                                               [0, 0, 1]])
 
     frames[CUP2ROBOT].rotation = np.array([[-1, 0, 0],
                                            [0, -1, 0],
                                            [0, 0, 1]])
 
     angle = 50
-    frames[TOOL2TCP].rotation = np.array([[0, 0, 0],
-                                          [0, 0, 0],
+    frames[TOOL2TCP].rotation = np.array([[1, 0, 0],
+                                          [0, 1, 0],
                                           [0, 0, -1]])
     for name, frame in frames.items():
         frame.calc_transform()
