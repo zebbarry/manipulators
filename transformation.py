@@ -51,10 +51,9 @@ def main():
     filename = 'reference_frames.csv'
     frames = read_frames(filename)
 
-    print(frames[GLOBAL + SILVIA])
-    print(frames[GLOBAL + GRINDER])
-    print(frames[GLOBAL + CROSS])
-    print(frames[GLOBAL + CUP])
+    for name, frame in frames.items():
+        print(name)
+        print(frame)
 
     silvia_frame_point = rdk.Mat([0, 218, 0, 1])
     silvia_robot_point = frames[GLOBAL + SILVIA] * silvia_frame_point
