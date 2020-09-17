@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import robodk as rdk
 from reference_frames import *
 
 
@@ -21,6 +22,7 @@ def plot_scene(frames, test_points):
 
     scale = 50
     for name, frame in frames.items():
+        print("{} is homogenous: {}".format(name, frame.isHomogeneous()))
         if name != GLOBAL:
             rotation = frame.Rot33().Rows()
             plt.plot([frame.Pos()[0], frame.Pos()[0] + scale * rotation[0][0]],
@@ -49,10 +51,10 @@ def main():
     filename = 'reference_frames.csv'
     frames = read_frames(filename)
 
-    # print(frames[GLOBAL + SILVIA])
-    # print(frames[GLOBAL + GRINDER])
-    # print(frames[GLOBAL + CROSS])
-    # print(frames[GLOBAL + CUP])
+    print(frames[GLOBAL + SILVIA])
+    print(frames[GLOBAL + GRINDER])
+    print(frames[GLOBAL + CROSS])
+    print(frames[GLOBAL + CUP])
 
     silvia_frame_point = rdk.Mat([0, 218, 0, 1])
     silvia_robot_point = frames[GLOBAL + SILVIA] * silvia_frame_point

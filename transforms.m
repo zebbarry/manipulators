@@ -1,8 +1,8 @@
 close all; clear; clc;
 
 origin = [4.71, 0, 144.76];
-reference = [660, 68.77, 156.07];
-vector = flip(reference - origin);
+reference = [-577.06, -446.46, 341.38];
+vector = reference - origin;
 
 
 origin_norm = origin/norm(origin);
@@ -14,11 +14,18 @@ axis_norm = vector / norm(vector);
 xa = [1 0 0];
 ya = [0 1 0];
 za = [0 0 1];
-xb = axis_norm;
-angle = acos(dot(xb, xa))
-angle = deg2rad(-7.5);
+yb = axis_norm;
+% angle = acos(dot(yb, ya))
+angle = deg2rad(-90);
 
-transform = [cos(angle) 0 -sin(angle);
-             0 1 0;
-             sin(angle) 0 cos(angle)]
+transformX = [1 0 0;
+              0 cos(angle) -sin(angle);
+              0 sin(angle) cos(angle)];
+transformY = [cos(angle) 0 -sin(angle);
+              0 1 0;
+              sin(angle) 0 cos(angle)]
+transformZ = [cos(angle) -sin(angle) 0;
+              sin(angle) cos(angle) 0;
+              0 0 1];
+norm(transformZ)
          

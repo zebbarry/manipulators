@@ -11,6 +11,7 @@ PUSHERMOUNT = 'pushermount'
 FILTERMOUNT = 'filtermount'
 CLAMPMOUNT = 'clampmount'
 FILTER = 'filter'
+BALL = 'ball'
 
 
 def read_frames(filename):
