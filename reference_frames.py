@@ -9,7 +9,7 @@ TCP = 'tcp'
 TOOL = 'tool'
 GRINDERMOUNT = 'grindermount'
 FILTERMOUNT = 'filtermount'
-CLAMPMOUNT = 'clampmount'
+CUPMOUNT = 'cupmount'
 FILTER = 'filter'
 BALL = 'ball'
 
