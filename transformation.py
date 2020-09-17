@@ -22,7 +22,6 @@ def plot_scene(frames, test_points):
 
     scale = 50
     for name, frame in frames.items():
-        print("{} is homogenous: {}".format(name, frame.isHomogeneous()))
         if name != GLOBAL:
             rotation = frame.Rot33().Rows()
             plt.plot([frame.Pos()[0], frame.Pos()[0] + scale * rotation[0][0]],
@@ -54,6 +53,7 @@ def main():
     for name, frame in frames.items():
         print(name)
         print(frame)
+        print("{} is homogenous: {}".format(name, frame.isHomogeneous()))
 
     silvia_frame_point = rdk.Mat([0, 218, 0, 1])
     silvia_robot_point = frames[GLOBAL + SILVIA] * silvia_frame_point
@@ -63,7 +63,7 @@ def main():
     cross_robot_point = frames[GLOBAL + CROSS] * cross_frame_point
 
     test_points = [silvia_robot_point, grinder_robot_point, cross_robot_point]
-    plot_scene(frames, test_points)
+    # plot_scene(frames, test_points)
 
 
 if __name__ == '__main__':
