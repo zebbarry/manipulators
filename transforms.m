@@ -1,6 +1,6 @@
 close all; clear; format long; clc;
 
-origin = [4.71, 0, 144.76];
+origin = [-366.20, -389.80, 341.38];
 reference = [-577.06, -446.46, 341.38];
 vector = reference - origin;
 
@@ -23,9 +23,17 @@ transformX = [1 0 0;
               0 sin(angle) cos(angle)];
 transformY = [cos(angle) 0 sin(angle);
               0 1 0;
-              -sin(angle) 0 cos(angle)]
+              -sin(angle) 0 cos(angle)];
 transformZ = [cos(angle) -sin(angle) 0;
               sin(angle) cos(angle) 0;
+<<<<<<< HEAD
               0 0 1];
 norm(transformY)
+=======
+              0 0 1]
+norm(transformZ)
+
+% allOneString = sprintf('%f,' , transformZ);
+% allOneString = allOneString(1:end-1)% strip final comma
+>>>>>>> 7dc92ddbcd866003ae1565414b5e5e2fb05341bc
          
