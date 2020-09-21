@@ -5,7 +5,6 @@
 # Note: It is not required to keep a copy of this file, your python script is saved with the station
 import robolink as rl  # RoboDK API
 import robodk as rdk  # Robot toolbox
-# import numpy as np
 from reference_frames import *
 
 COMMAND_WAIT = 15
@@ -15,6 +14,7 @@ FILTERFUNC = 'Portafilter Tool'
 CUPFUNC = 'Cup Tool'
 ATTACH = ' Attach'
 DETACH = ' Detach'
+STAND = 'Stand'
 OPEN = ' Open'
 CLOSE = ' Close'
 HOME = 'Home'
@@ -22,53 +22,80 @@ HOME = 'Home'
 
 class CoffeeMachine(object):
 
-    def __init__(self, robot, RDK, frames, joint_angles, log_file='~/log.txt'):
+    def __init__(self, robot, RDK, frames, joint_angles, log_filename='~/log.txt'):
         self.robot = robot
         self.frames = frames
         self.joint_angles = joint_angles
-        self.functions = {}
         self.RDK = RDK
-        self.log_filename = log_file
-        self.log_file = open(logfile, 'w')
+        self.log_filename = log_filename
+        self.log_file = open(self.log_filename, 'a')
+        self.log("\n\n")
 
     def log(self, message):
         self.log_file.write(message)
 
     def close_log(self):
-        close(self.log_file)
+        self.log_file.close()
 
-    def add_function(self, name):
-        self.functions[name] = self.RDK.Item(name)
-        self.log("Function '{}' added".format(name))
-
-    def MoveJ(self, matrix):
+    def MoveJ(self, matrix, pos=""):
         self.robot.MoveJ(matrix)
-        self.log("Moving to new position")
-        self.log(matrix)
+        self.log("Joint move to new position: {}\n".format(pos))
+        # self.log(matrix.ToString())
 
-    def tool_mount(self, name, pickup=True):
+    def MoveL(self, matrix, pos=""):
+        self.robot.MoveL(matrix)
+        self.log("Linear move to new position: {}\n".format(pos))
+
+    def tool_mount(self, name, pickup=True, location=STAND):
         if name == GRINDER:
             mount = GRINDERMOUNT
             func = GRINDERFUNC
         elif name == FILTER:
             mount = FILTERMOUNT
             func = FILTERFUNC
-        elif name == CUP:
+        else:  # name == CUP
             mount = CUPMOUNT
             func = CUPFUNC
 
-        self.robot.MoveJ(self.joint_angles[GLOBAL + mount])
-        self.robot.MoveJ(self.frames[GLOBAL + mount])
+        self.MoveJ(self.joint_angles[mount], mount)
+        self.MoveJ(self.frames[GLOBAL + mount], mount)
         operation = ATTACH if pickup else DETACH
-        name = func + operation
-        self.functions[name].RunCode(self.functions[name], True)
-        self.log("Tool Mount Operation - Tool: {}, Operation: {}".format(name, operation))
+        name = func + operation + " (" + location.capitalize() + ")"
+        self.log("Tool Mount Operation - Tool: {}, Operation:{}\n".format(name, operation))
+        self.RDK.RunProgram(name, True)
+
+    def cup_tool(self, operation):
+        name = CUPFUNC + operation
+        self.log("Cup Tool Operation - Operation:{}\n".format(operation))
+        self.RDK.RunProgram(name, True)
+
+    def cup_from_stack(self):
+        self.MoveJ(self.frames[HOME], HOME)
+        self.tool_mount(CUP, True)
+        self.frames[CUP + TOOL] = self.frames[TOOL + CUP].inv()
+        cup_pickup_matrix = self.frames[GLOBAL + CUPSTACK] * self.frames[CUPSTACK + CUP] \
+                            * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
+
+        starting_joint = [-58.899645, -62.825624, -101.410750, -195.763624, -58.899645, -40.000000]
+        self.MoveL(starting_joint)  # Avoid other tools
+        self.MoveJ(starting_joint)  # get correct orientation
+        self.MoveL(self.joint_angles[CUPSTACK + 'entry'], CUPSTACK + 'entry')
+        self.cup_tool(OPEN)
+
+        self.MoveL(cup_pickup_matrix, CUPSTACK)
+        self.cup_tool(CLOSE)
+
+        remove_cup = rdk.transl(0, 0, 300) * cup_pickup_matrix
+        # rotate_cup = remove_cup * rdk.rotz(3.141592653589793)
+        self.MoveL(remove_cup)
+        self.MoveJ([-67.086904, -72.156801, -110.743598, -177.099600, -67.086904, 140.000000])
 
 
 def main():
     # Read transformation matrices from file
     frame_filename = 'reference_frames.csv'
     joint_filename = 'joint_angles.csv'
+    logfile = 'output.txt'
     frames = read_frames(frame_filename)
     joint_angles = read_joint_angles(joint_filename)
 
@@ -80,46 +107,34 @@ def main():
     robot.setPoseFrame(world_frame)
     robot.setPoseTool(robot.PoseTool())
 
-    machine = CoffeeMachine(robot, RDK, frames, joint_angles)
+    machine = CoffeeMachine(robot, RDK, frames, joint_angles, logfile)
     machine.frames[HOME] = home
 
     # Read subprograms
-    grinder_tool_attach = RDK.Item('Grinder Tool Attach')
-    grinder_tool_detach = RDK.Item('Grinder Tool Detach')
-    filter_tool_attach = RDK.Item('Portafilter Tool Attach')
-    filter_tool_detach = RDK.Item('Portafilter Tool Detach')
-    cup_tool_attach = RDK.Item('Cup Tool Attach')
-    cup_tool_detach = RDK.Item('Cup Tool Detach')
-
-    machine.add_function(GRINDERFUNC+ATTACH)
-    machine.add_function(GRINDERFUNC+DETACH)
-    machine.add_function(FILTERFUNC+ATTACH)
-    machine.add_function(FILTERFUNC+DETACH)
-    machine.add_function(CUPFUNC+ATTACH)
-    machine.add_function(CUPFUNC+DETACH)
-    machine.add_function(CUPFUNC+OPEN)
-    machine.add_function(CUPFUNC+CLOSE)
 
     # Pickup filter
-    robot.MoveJ(home)
-    machine.tool_mount(GRINDER, True)
-    machine.tool_mount(GRINDER, False)
-    robot.MoveJ(home)
-    machine.tool_mount(FILTER, True)
-    machine.tool_mount(FILTER, False)
-    robot.MoveJ(home)
-    machine.tool_mount(CUP, True)
-    machine.tool_mount(CUP, False)
-    robot.MoveJ(home)
+    # machine.MoveJ(home)
+    # machine.tool_mount(GRINDER, True)
+    # machine.tool_mount(GRINDER, False)
+    # machine.MoveJ(home)
+    # machine.tool_mount(FILTER, True)
+    # machine.tool_mount(FILTER, False)
+    # machine.MoveJ(home)
+    # machine.tool_mount(CUP, True)
+    # machine.tool_mount(CUP, False)
+    # machine.MoveJ(home)
 
     # Move to ball
-    frames[BALL + TOOL] = frames[TOOL + BALL].inv()
-    frames[TOOL + TCP] = frames[TCP + TOOL].inv()
-    frames[FILTER + TOOL] = frames[TOOL + FILTER].inv()
-    global2end = frames[GLOBAL + GRINDER] * frames[GRINDER + BALL] * frames[BALL + TOOL] * frames[TOOL + TCP]
-    robot.MoveJ(machine.joint_angles[GLOBAL+'filterinsert'])
-    robot.MoveJ(global2end)
-    # robot.MoveJ(home)
+    # machine.frames[BALL + TOOL] = frames[TOOL + BALL].inv()
+    machine.frames[TOOL + TCP] = frames[TCP + TOOL].inv()
+    # machine.frames[FILTER + TOOL] = frames[TOOL + FILTER].inv()
+    # global2end = machine.frames[GLOBAL + GRINDER] * machine.frames[GRINDER + BALL] \
+    #              * machine.frames[BALL + TOOL] * machine.frames[TOOL + TCP]
+    # machine.MoveJ(machine.joint_angles['filterinsert'])
+    # machine.MoveJ(global2end)
+    # machine.MoveJ(home)
+
+    machine.cup_from_stack()
 
     machine.close_log()
 
