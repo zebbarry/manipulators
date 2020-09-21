@@ -15,8 +15,8 @@ xa = [1 0 0];
 ya = [0 1 0];
 za = [0 0 1];
 yb = axis_norm;
-% angle = acos(dot(yb, ya))
-angle = deg2rad(-90);
+angle = acos(dot(yb, ya))
+% angle = deg2rad(-7.5);
 
 transformX = [1 0 0;
               0 cos(angle) -sin(angle);
@@ -27,12 +27,7 @@ transformY = [cos(angle) 0 sin(angle);
 transformZ = [cos(angle) -sin(angle) 0;
               sin(angle) cos(angle) 0;
               0 0 1];
-test = [1 0 0;
-        0 -1 0;
-        0 0 -1];
-transform  = transformZ * test
-norm(transform)
+norm(transformZ)
 
 % allOneString = sprintf('%f,' , transformZ);
 % allOneString = allOneString(1:end-1)% strip final comma
-         
