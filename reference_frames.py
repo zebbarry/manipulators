@@ -3,6 +3,7 @@ import robodk as rdk
 GLOBAL = 'global'
 SILVIA = 'silvia'
 GRINDER = 'grinder'
+CUPSTACK = 'cupstack'
 CUP = 'cup'
 CROSS = 'cross'
 TCP = 'tcp'
