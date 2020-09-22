@@ -109,6 +109,7 @@ def main():
 
     machine = CoffeeMachine(robot, RDK, frames, joint_angles, logfile)
     machine.frames[HOME] = home
+    machine.frames[TOOL + TCP] = frames[TCP + TOOL].inv()
 
     # Read subprograms
 
@@ -126,7 +127,6 @@ def main():
 
     # Move to ball
     # machine.frames[BALL + TOOL] = frames[TOOL + BALL].inv()
-    machine.frames[TOOL + TCP] = frames[TCP + TOOL].inv()
     # machine.frames[FILTER + TOOL] = frames[TOOL + FILTER].inv()
     # global2end = machine.frames[GLOBAL + GRINDER] * machine.frames[GRINDER + BALL] \
     #              * machine.frames[BALL + TOOL] * machine.frames[TOOL + TCP]
@@ -134,7 +134,22 @@ def main():
     # machine.MoveJ(global2end)
     # machine.MoveJ(home)
 
-    machine.cup_from_stack()
+    # machine.cup_from_stack()
+
+    # Pickup filter
+    machine.MoveJ(home)
+    machine.tool_mount(GRINDER, True)
+
+    # Move to ball
+    #frames[BALL+TOOL] = frames[TOOL+BALL].inv()
+    machine.frames[TOOL+TCP] = machine.frames[TCP+TOOL].inv()
+    #global2end = frames[GLOBAL+GRINDER] * frames[GRINDER+BALL] * frames[BALL+TOOL] #* frames[TOOL+TCP]
+    global2end = machine.frames[GLOBAL+SILVIA] * machine.frames[SILVIA+SILVIAPOWERBUTTON] * machine.frames[TOOL+TCP]
+    print(global2end)
+    machine.MoveJ(global2end)
+    push = global2end * rdk.transl(0, 0, 8)
+    #global2end = frames[GLOBAL+SILVIA] * frames[SILVIA+SILVIAPOWERBUTTONPUSH] * frames[TOOL+TCP]
+    machine.MoveL(push)
 
     machine.close_log()
 
