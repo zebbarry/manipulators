@@ -13,7 +13,8 @@ FILTERMOUNT = 'filtermount'
 CUPMOUNT = 'cupmount'
 FILTER = 'filter'
 BALL = 'ball'
-POWERBUTTON = 'powerbutton'
+SILVIAPOWERBUTTON = 'silviapowerbutton'
+SILVIAPOWERBUTTONPUSH = 'silviapowerbuttonpush'
 
 
 def read_frames(filename):

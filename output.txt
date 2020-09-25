@@ -1,43 +1,25 @@
 
 
-Joint move to new position
+Joint move to new position: Home
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
+Linear move to new position: 
+Joint move to new position: 
+Linear move to new position: cupstackentry
+Cup Tool Operation - Operation: Open
+Linear move to new position: cupstack
+Cup Tool Operation - Operation: Close
+Linear move to new position: 
+Joint move to new position: 
 
 
-Joint move to new position
-
-
-Joint move to new position
-Joint move to new position
-Joint move to new position
-Tool Mount Operation - Tool: Portafilter Tool Attach (Stand), Operation: Attach (Stand)
-Joint move to new position
-Joint move to new position
-Tool Mount Operation - Tool: Portafilter Tool Detach (Stand), Operation: Detach (Stand)
-Joint move to new position
-Joint move to new position
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach (Stand)
-Joint move to new position
-Joint move to new position
-Tool Mount Operation - Tool: Cup Tool Detach (Stand), Operation: Detach (Stand)
-Joint move to new position
-Joint move to new position
-
-
-Joint move to new position
-Joint move to new position
-Joint move to new position
-Tool Mount Operation - Tool: Portafilter Tool Attach (Stand), Operation: Attach (Stand)
-Joint move to new position
-Joint move to new position
-Tool Mount Operation - Tool: Portafilter Tool Detach (Stand), Operation: Detach (Stand)
-Joint move to new position
-Joint move to new position
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach (Stand)
-Joint move to new position
-Joint move to new position
-Tool Mount Operation - Tool: Cup Tool Detach (Stand), Operation: Detach (Stand)
-Joint move to new position
-Joint move to new position
+Joint move to new position: 
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Attach (Stand), Operation: Attach
+Joint move to new position: 
+Linear move to new position: 
 
 
 
@@ -46,364 +28,233 @@ Joint move to new position
 
 
 
+Joint move to new position: 
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Attach (Stand), Operation: Attach
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Linear move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: 
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Attach (Stand), Operation: Attach
+Joint move to new position: grindermount
+Joint move to new position: 
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: 
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Attach (Stand), Operation: Attach
+Joint move to new position: grindermount
+Joint move to new position: 
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: grindermount
+Joint move to new position: 
+Joint move to new position: 
+Linear move to new position: 
+
+
+Joint move to new position: 
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Attach (Stand), Operation: Attach
+Joint move to new position: 
+Joint move to new position: 
+Linear move to new position: 
+Joint move to new position: 
+Joint move to new position: 
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Detach (Stand), Operation: Detach
+Joint move to new position: 
+
+
+Joint move to new position: 
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Attach (Stand), Operation: Attach
+Joint move to new position: 
+Joint move to new position: 
+Linear move to new position: 
+Joint move to new position: 
+Joint move to new position: 
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Detach (Stand), Operation: Detach
 Joint move to new position: 
 Joint move to new position: Home
-Joint move to new position: 
-Joint move to new position: globalcupmount
+Joint move to new position: cupmount
+Joint move to new position: cupmount
 Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
+Linear move to new position: 
 Joint move to new position: 
-Joint move to new position: globalcupmount
+Linear move to new position: cupstackentry
+Cup Tool Operation - Operation: Open
+Linear move to new position: cupstack
+Cup Tool Operation - Operation: Close
+Linear move to new position: 
+Joint move to new position: 
+
+
+Joint move to new position: Home
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
+Linear move to new position: 
+Joint move to new position: 
+Linear move to new position: cupstackentry
+Cup Tool Operation - Operation: Open
+Linear move to new position: cupstack
+Cup Tool Operation - Operation: Close
+Linear move to new position: 
+Joint move to new position: 
+Cup Tool Operation - Operation: Open
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Detach (Stand), Operation: Detach
+
+
+Joint move to new position: Home
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
+Linear move to new position: 
+Joint move to new position: 
+Linear move to new position: cupstackentry
+Cup Tool Operation - Operation: Open
+Linear move to new position: cupstack
+Cup Tool Operation - Operation: Close
+Linear move to new position: 
+Joint move to new position: 
+Cup Tool Operation - Operation: Open
+Joint move to new position: 
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Detach (Stand), Operation: Detach
+
+
+Joint move to new position: Home
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
+Linear move to new position: 
+Joint move to new position: 
+Linear move to new position: cupstackentry
+Cup Tool Operation - Operation: Open
+Linear move to new position: cupstack
+Cup Tool Operation - Operation: Close
+Linear move to new position: 
+Joint move to new position: 
+Cup Tool Operation - Operation: Open
+Cup Tool Operation - Operation: Close
+Joint move to new position: 
+Linear move to new position: cupmount
+Joint move to new position: cupmount
+Joint move to new position: cupmount
 Tool Mount Operation - Tool: Cup Tool Detach (Stand), Operation: Detach
 
 
 Joint move to new position: 
-Joint move to new position: Home
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Attach (Stand), Operation: Attach
 Joint move to new position: 
-Joint move to new position: globalcupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-
-
-Joint move to new position: 
-Joint move to new position: Home
-Joint move to new position: 
-Joint move to new position: globalcupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Pose(1.490, -414.430, 80.250,  90.000, 0.000, -40.000):
-[[ 0.766, 0.643, 0.000, 1.490 ],
- [ 0.000, 0.000, -1.000, -414.430 ],
- [ -0.643, 0.766, 0.000, 80.250 ],
- [ 0.000, 0.000, 0.000, 1.000 ]]
-Joint move to new position: 
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Joint move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Cup Tool Operation - Operation: Open
-Joint move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Cup Tool Operation - Operation: Open
-Joint move to new position: cupstack
-Cup Tool Operation - Operation: Close
-Joint move to new position: Home
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Cup Tool Operation - Operation: Open
-Joint move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Cup Tool Operation - Operation: Open
-Joint move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Cup Tool Operation - Operation: Open
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Cup Tool Operation - Operation: Open
-Joint move to new position: 
-Joint move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Cup Tool Operation - Operation: Open
-Joint move to new position: 
-Joint move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Cup Tool Operation - Operation: Open
-Joint move to new position: 
-Joint move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: cupmount
-
-
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Cup Tool Operation - Operation: Open
-Joint move to new position: cupstack
-Joint move to new position: 
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Cup Tool Operation - Operation: Open
-Joint move to new position: cupstack
-Joint move to new position: 
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Cup Tool Operation - Operation: Open
-Joint move to new position: cupstack
-Linear move to new position: 
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Cup Tool Operation - Operation: Open
-Joint move to new position: cupstack
-
-
-Joint move to new position: Home
-Cup Tool Operation - Operation: Open
-Joint move to new position: 
-Linear move to new position: cupstack
-
-
-Joint move to new position: Home
-Joint move to new position: 
-Cup Tool Operation - Operation: Open
-Joint move to new position: 
-Linear move to new position: cupstack
-
-
-Joint move to new position: 
-Cup Tool Operation - Operation: Open
-Linear move to new position: cupstack
-Joint move to new position: 
-
-
-Joint move to new position: 
-Cup Tool Operation - Operation: Open
-Joint move to new position: 
-Joint move to new position: cupstackentry
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-
-
-Joint move to new position: 
-Cup Tool Operation - Operation: Open
-Joint move to new position: 
-Joint move to new position: cupstackentry
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: 
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Linear move to new position: 
-Cup Tool Operation - Operation: Open
-Joint move to new position: cupstackentry
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Linear move to new position: 
-Cup Tool Operation - Operation: Open
-Joint move to new position: cupstackentry
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Linear move to new position: 
-Cup Tool Operation - Operation: Open
-Joint move to new position: cupstackentry
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Linear move to new position: 
-Cup Tool Operation - Operation: Open
-Joint move to new position: cupstackentry
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Joint move to new position: cupstackentry
-Cup Tool Operation - Operation: Open
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Linear move to new position: 
-Joint move to new position: cupstackentry
-Cup Tool Operation - Operation: Open
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Joint move to new position: cupmount
-Joint move to new position: cupmount
-Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
-Linear move to new position: 
-Linear move to new position: cupstackentry
-Cup Tool Operation - Operation: Open
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Linear move to new position: 
-Linear move to new position: cupstackentry
-Cup Tool Operation - Operation: Open
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Linear move to new position: 
-Linear move to new position: cupstackentry
-Cup Tool Operation - Operation: Open
-Cup Tool Operation - Operation: Close
-
-
-Joint move to new position: Home
-Joint move to new position: cupstackentry
-Linear move to new position: 
-
-
-Joint move to new position: Home
-Joint move to new position: cupstackentry
-
-
-Joint move to new position: Home
-Joint move to new position: cupstackentry
-Linear move to new position: 
-
-
-Joint move to new position: Home
-Linear move to new position: 
-Joint move to new position: cupstackentry
-
-
-Joint move to new position: Home
-Joint move to new position: 
-Linear move to new position: 
-Joint move to new position: cupstackentry
-
-
-Joint move to new position: Home
-Joint move to new position: 
-Linear move to new position: 
-Linear move to new position: cupstackentry
-
-
-Joint move to new position: Home
-Joint move to new position: 
-Linear move to new position: 
-Joint move to new position: cupstackentry
-Joint move to new position: 
-
-
-Joint move to new position: Home
-Joint move to new position: 
-Joint move to new position: 
-Joint move to new position: cupstackentry
-
-
-Joint move to new position: Home
-Joint move to new position: 
-Joint move to new position: 
-Joint move to new position: cupstackentry
-
-
-Joint move to new position: Home
-Joint move to new position: 
-Joint move to new position: 
-Joint move to new position: cupstackentry
-
-
-Joint move to new position: 
-Joint move to new position: 
-Joint move to new position: cupstackentry
-
-
-Joint move to new position: 
-Linear move to new position: 
-Joint move to new position: cupstackentry
-
-
-Joint move to new position: 
-Linear move to new position: 
-Joint move to new position: cupstackentry
-
-
 Joint move to new position: 
 Linear move to new position: 
 Joint move to new position: 
-Joint move to new position: cupstackentry
-
-
 Joint move to new position: 
-Linear move to new position: 
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Detach (Stand), Operation: Detach
 Joint move to new position: 
-Linear move to new position: cupstackentry
-
-
-Joint move to new position: 
+Joint move to new position: Home
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
 Linear move to new position: 
 Joint move to new position: 
 Linear move to new position: cupstackentry
@@ -412,9 +263,26 @@ Linear move to new position: cupstack
 Cup Tool Operation - Operation: Close
 Linear move to new position: 
 Joint move to new position: 
+Cup Tool Operation - Operation: Open
 
 
 Joint move to new position: 
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Attach (Stand), Operation: Attach
+Joint move to new position: 
+Joint move to new position: 
+Linear move to new position: 
+Joint move to new position: 
+Joint move to new position: 
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Detach (Stand), Operation: Detach
+Joint move to new position: 
+Joint move to new position: Home
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
 Linear move to new position: 
 Joint move to new position: 
 Linear move to new position: cupstackentry
@@ -423,67 +291,50 @@ Linear move to new position: cupstack
 Cup Tool Operation - Operation: Close
 Linear move to new position: 
 Joint move to new position: 
-
-
-Joint move to new position: 
-Linear move to new position: 
-Joint move to new position: 
-Linear move to new position: cupstackentry
 Cup Tool Operation - Operation: Open
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-Linear move to new position: 
-Joint move to new position: 
 
 
 Joint move to new position: 
-Linear move to new position: 
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Attach (Stand), Operation: Attach
 Joint move to new position: 
-Linear move to new position: cupstackentry
-Cup Tool Operation - Operation: Open
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-Linear move to new position: 
-Joint move to new position: 
-
-
 Joint move to new position: 
 Linear move to new position: 
 Joint move to new position: 
-Linear move to new position: cupstackentry
-Cup Tool Operation - Operation: Open
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-Linear move to new position: 
-
-
 Joint move to new position: 
-Linear move to new position: 
+Joint move to new position: grindermount
+Joint move to new position: grindermount
+Tool Mount Operation - Tool: Grinder Tool Detach (Stand), Operation: Detach
 Joint move to new position: 
-Linear move to new position: cupstackentry
-Cup Tool Operation - Operation: Open
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-Linear move to new position: 
-
-
-Joint move to new position: 
-Linear move to new position: 
-Joint move to new position: 
-Linear move to new position: cupstackentry
-Cup Tool Operation - Operation: Open
-Linear move to new position: cupstack
-Cup Tool Operation - Operation: Close
-Linear move to new position: 
-Joint move to new position: 
-
-
 
 
 Joint move to new position: Home
 Joint move to new position: cupmount
 Joint move to new position: cupmount
 Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
+Linear move to new position: 
+Joint move to new position: 
+Linear move to new position: cupstackentry
+Cup Tool Operation - Operation: Open
+Linear move to new position: cupstack
+Cup Tool Operation - Operation: Close
+Linear move to new position: 
+Cup Tool Operation - Operation: Open
+
+
+Joint move to new position: Home
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
+Linear move to new position: 
+Joint move to new position: 
+Linear move to new position: cupstackentry
+Cup Tool Operation - Operation: Open
+Linear move to new position: cupstack
+Cup Tool Operation - Operation: Close
+Linear move to new position: 
+Cup Tool Operation - Operation: Open
 
 
 Joint move to new position: Home
@@ -498,4 +349,79 @@ Linear move to new position: cupstack
 Cup Tool Operation - Operation: Close
 Linear move to new position: 
 Joint move to new position: 
+Cup Tool Operation - Operation: Open
+
+
 Joint move to new position: Home
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
+Linear move to new position: 
+Joint move to new position: 
+Linear move to new position: cupstackentry
+Cup Tool Operation - Operation: Open
+Linear move to new position: cupstack
+Cup Tool Operation - Operation: Close
+Linear move to new position: 
+Joint move to new position: 
+Cup Tool Operation - Operation: Open
+
+
+Joint move to new position: Home
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
+Linear move to new position: 
+Joint move to new position: 
+Linear move to new position: cupstackentry
+Cup Tool Operation - Operation: Open
+Linear move to new position: cupstack
+Cup Tool Operation - Operation: Close
+Linear move to new position: 
+Joint move to new position: 
+Cup Tool Operation - Operation: Open
+
+
+Joint move to new position: Home
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
+Linear move to new position: 
+Joint move to new position: 
+Linear move to new position: cupstackentry
+Cup Tool Operation - Operation: Open
+Linear move to new position: cupstack
+Cup Tool Operation - Operation: Close
+Linear move to new position: 
+Joint move to new position: 
+Cup Tool Operation - Operation: Open
+
+
+Joint move to new position: Home
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
+Linear move to new position: 
+Joint move to new position: 
+Linear move to new position: cupstackentry
+Cup Tool Operation - Operation: Open
+Linear move to new position: cupstack
+Cup Tool Operation - Operation: Close
+Linear move to new position: 
+Joint move to new position: 
+Cup Tool Operation - Operation: Open
+
+
+Joint move to new position: Home
+Joint move to new position: cupmount
+Joint move to new position: cupmount
+Tool Mount Operation - Tool: Cup Tool Attach (Stand), Operation: Attach
+Linear move to new position: 
+Joint move to new position: 
+Linear move to new position: cupstackentry
+Cup Tool Operation - Operation: Open
+Linear move to new position: cupstack
+Cup Tool Operation - Operation: Close
+Linear move to new position: 
+Joint move to new position: 
+Cup Tool Operation - Operation: Open
