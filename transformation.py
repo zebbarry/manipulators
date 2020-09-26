@@ -63,7 +63,7 @@ def main():
     cross_robot_point = frames[GLOBAL + CROSS] * cross_frame_point
 
     test_points = [silvia_robot_point, grinder_robot_point, cross_robot_point]
-    # plot_scene(frames, test_points)
+    plot_scene(frames, test_points)
 
 
 if __name__ == '__main__':

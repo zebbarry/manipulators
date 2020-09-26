@@ -1,7 +1,7 @@
 close all; clear; format long; clc;
 
-origin = [-366.20, -389.80, 341.38];
-reference = [-577.06, -446.46, 341.38];
+origin = [482.29, -433.74, 314.13];
+reference = [370.66, -321.55, 66.86];
 vector = reference - origin;
 
 
@@ -14,8 +14,9 @@ axis_norm = vector / norm(vector);
 xa = [1 0 0];
 ya = [0 1 0];
 za = [0 0 1];
-yb = axis_norm;
-angle = acos(dot(yb, ya))
+xb = axis_norm;
+angle = acos(dot(xb, xa));
+rad2deg(angle)
 % angle = deg2rad(-7.5);
 
 transformX = [1 0 0;
@@ -27,7 +28,5 @@ transformY = [cos(angle) 0 sin(angle);
 transformZ = [cos(angle) -sin(angle) 0;
               sin(angle) cos(angle) 0;
               0 0 1];
-norm(transformZ)
-
-% allOneString = sprintf('%f,' , transformZ);
-% allOneString = allOneString(1:end-1)% strip final comma
+transform = transformZ
+% norm(transform)
