@@ -50,10 +50,14 @@ def main():
     filename = 'reference_frames.csv'
     frames = read_frames(filename)
 
+    all_true = True
     for name, frame in frames.items():
         print(name)
         print(frame)
         print("{} is homogenous: {}".format(name, frame.isHomogeneous()))
+        if not frame.isHomogeneous():
+            all_true = False
+    print(all_true)
 
     silvia_frame_point = rdk.Mat([0, 218, 0, 1])
     silvia_robot_point = frames[GLOBAL + SILVIA] * silvia_frame_point
