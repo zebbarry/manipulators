@@ -44,7 +44,6 @@ class CoffeeMachine(object):
     def MoveJ(self, matrix, pos=""):
         self.robot.MoveJ(matrix)
         self.log("Joint move to new position: {}".format(pos))
-        # self.log(matrix.ToString())
 
     def MoveL(self, matrix, pos=""):
         self.robot.MoveL(matrix)
@@ -76,8 +75,7 @@ class CoffeeMachine(object):
         self.RDK.RunProgram(name, True)
 
     def insert_filter_grinder(self):
-        self.log('')
-        self.log(STRIP * '-' + ' Insert filter in grinder ' + '-' * STRIP)
+        self.log('\n' + STRIP * '-' + ' Insert filter in grinder ' + '-' * STRIP)
         self.MoveJ(self.frames[HOME], HOME)
         global2ball = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + BALL]  # * rdk.roty(0.1309)
         filter_over_ball = rdk.transl(0, 0, 50) * global2ball * self.frames[FILTER + TOOL] \
@@ -89,13 +87,13 @@ class CoffeeMachine(object):
         self.MoveJ(rdk.rotz(HALFPI) * self.frames[GLOBAL + FILTERMOUNT])
         self.MoveJ(self.joint_angles['filterentry'], 'filter entry')
         # self.MoveJ(tool_on_ball)
-        self.MoveJ(self.joint_angles['filterinsert'], 'filter insert')
+        self.MoveJ(self.frames[GLOBAL + FILTER])
+        # self.MoveJ(self.joint_angles['filterinsert'], 'filter insert')
         self.tool_mount(FILTER, False, GRINDER)
         self.MoveJ(self.joint_angles['filterentry'], 'filter entry')
 
     def cup_from_stack(self):
-        self.log('')
-        self.log(STRIP * '-' + ' Get cup from stack ' + '-' * STRIP)
+        self.log('\n' + STRIP * '-' + ' Get cup from stack ' + '-' * STRIP)
         self.MoveJ(self.frames[HOME], HOME)
         self.tool_mount(CUP, True)
         self.frames[CUP + TOOL] = self.frames[TOOL + CUP].inv()
@@ -119,8 +117,7 @@ class CoffeeMachine(object):
         self.MoveJ(rotated_cup, 'Rotate cup')
 
     def turn_on_silvia(self):
-        self.log('')
-        self.log(STRIP * '-' + ' Turn on coffee machine ' + '-' * STRIP)
+        self.log('\n' + STRIP * '-' + ' Turn on coffee machine ' + '-' * STRIP)
         self.MoveJ(self.frames[HOME])
         self.tool_mount(GRINDER, True)
         # self.MoveJ(self.joint_angles[GRINDERMOUNT], GRINDERMOUNT)
@@ -141,8 +138,7 @@ class CoffeeMachine(object):
         self.MoveJ(self.frames[HOME], HOME)
 
     def turn_on_grinder(self):
-        self.log('')
-        self.log(STRIP * '-' + ' Turn on grinder ' + '-' * STRIP)
+        self.log('\n' + STRIP * '-' + ' Turn on grinder ' + '-' * STRIP)
         self.MoveJ(self.frames[HOME])
         self.tool_mount(GRINDER, True)
         # self.MoveJ(self.joint_angles[GRINDERMOUNT], GRINDERMOUNT)
@@ -174,30 +170,70 @@ class CoffeeMachine(object):
         self.MoveJ(intermediate_point, 'Avoid grinder')
 
     def pull_lever(self):
-        self.log('')
-        self.log(STRIP * '-' + ' Pull lever ' + '-' * STRIP)
+        self.log('\n' + STRIP * '-' + ' Pull lever ' + '-' * STRIP)
 
         global2start = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + LEVER] * rdk.transl(-5, -20, 0) \
                        * self.frames[PULLER + TOOL] * self.frames[TOOL + TCP]
         mid_pull = global2start * rdk.transl(0, 0, -50)
         angle = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + LEVER] * rdk.transl(-5, -20, 0) \
-                   * rdk.transl(0, 0, -50) * rdk.roty(0.436332) * self.frames[PULLER + TOOL]
+                * rdk.transl(0, 0, -50) * rdk.roty(0.436332) * self.frames[PULLER + TOOL]
         end_pull = angle * rdk.transl(0, 0, -40) * self.frames[TOOL + TCP]
         release = angle * rdk.transl(0, 0, -40) * rdk.transl(50, -50, 0) * self.frames[TOOL + TCP]
 
-        self.MoveJ(self.joint_angles[GRINDER+LEVER], 'Correct joint angles')
+        self.MoveJ(self.joint_angles[GRINDER + LEVER], 'Correct joint angles')
         self.MoveJ(global2start, 'Move to lever')
         self.MoveJ(mid_pull, 'Pull grinder lever')
         self.MoveJ(angle * self.frames[TOOL + TCP], 'Change angle')
         self.MoveJ(end_pull, 'Pull grinder lever')
         self.MoveJ(release, 'Release lever')
         self.tool_mount(GRINDER, False)
+        self.MoveJ(self.frames[HOME])
 
     def scrape_filter(self):
-        pass
+        self.log('\n' + STRIP * '-' + ' Scrape coffee from filter ' + '-' * STRIP)
+        self.MoveJ(self.frames[HOME])
+
+        self.MoveJ(self.joint_angles['filterentry'], 'filter entry')
+        self.tool_mount(FILTER, True, GRINDER)
+
+        lift_off_ball = self.robot.Pose() * self.frames[TCP + TOOL] * self.frames[TOOL + FILTER] * rdk.roty(-0.1) \
+                        * rdk.transl(-2, 0, 0) * self.frames[FILTER + TOOL] * self.frames[TOOL + TCP]
+        pull_out = lift_off_ball * rdk.transl(0, 0, -70)
+        level = pull_out * self.frames[TCP + TOOL] * rdk.roty(0.1) \
+                * self.frames[TOOL + TCP]
+
+        self.MoveL(lift_off_ball, 'Lift off ball')
+        self.MoveL(pull_out, 'Pull out filter')
+        self.MoveJ(level, 'Pull out filter')
+
+        global2scraper = self.frames[GLOBAL + CROSS] * self.frames[CROSS + SCRAPER]
+        start = global2scraper * rdk.transl(0, 0, -100) * self.frames[SCRAPER + FILTER] * self.frames[FILTER + TOOL] \
+                * self.frames[TOOL + TCP]
+        end = global2scraper * rdk.transl(0, 0, 50) * self.frames[SCRAPER + FILTER] * self.frames[FILTER + TOOL] \
+              * self.frames[TOOL + TCP]
+
+        self.MoveJ(start, 'Scraper start')
+        self.MoveL(end, 'Scraper end')
+        self.MoveL(start, 'Scraper start')
 
     def tamp_filter(self):
-        pass
+        self.log('\n' + STRIP * '-' + ' Tamp coffee filter ' + '-' * STRIP)
+
+        global2tamper = self.frames[GLOBAL + CROSS] * self.frames[CROSS + TAMPER]
+        intermediate = global2tamper * rdk.transl(0, 0, -100) * self.frames[TAMPER + FILTER] * self.frames[FILTER + TOOL] \
+                * self.frames[TOOL + TCP]
+        start = global2tamper * self.frames[TAMPER + FILTER] * self.frames[FILTER + TOOL] \
+                * self.frames[TOOL + TCP]
+        depth = 8
+        end = global2tamper * self.frames[SCRAPER + FILTER] * rdk.transl(depth, 0, 0) * self.frames[FILTER + TOOL] \
+                * self.frames[TOOL + TCP]
+
+        self.MoveJ(intermediate, 'Move to tamper')
+        self.MoveJ(start, 'Tamper start')
+        self.MoveL(end, 'Compress coffee')
+        self.MoveL(start, 'Lower filter')
+        self.MoveJ(intermediate, 'Remove from tamper')
+
 
     def insert_filter_silvia(self):
         pass
@@ -236,8 +272,10 @@ def main():
     # Run subprograms
 
     # machine.insert_filter_grinder()
-    machine.turn_on_grinder()
-    machine.pull_lever()
+    # machine.turn_on_grinder()
+    # machine.pull_lever()
+    # machine.scrape_filter()
+    machine.tamp_filter()
     # machine.turn_on_silvia()
     # machine.cup_from_stack()
 
