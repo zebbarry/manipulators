@@ -172,6 +172,8 @@ class CoffeeMachine(object):
     def pull_lever(self):
         self.log('\n' + STRIP * '-' + ' Pull lever ' + '-' * STRIP)
 
+        n = 3 # amount of times leaver needs to be pulled
+
         global2start = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + LEVER] * rdk.transl(-5, -20, 0) \
                        * self.frames[PULLER + TOOL] * self.frames[TOOL + TCP]
         mid_pull = global2start * rdk.transl(0, 0, -50)
@@ -179,13 +181,17 @@ class CoffeeMachine(object):
                 * rdk.transl(0, 0, -50) * rdk.roty(0.436332) * self.frames[PULLER + TOOL]
         end_pull = angle * rdk.transl(0, 0, -40) * self.frames[TOOL + TCP]
         release = angle * rdk.transl(0, 0, -40) * rdk.transl(50, -50, 0) * self.frames[TOOL + TCP]
+        i = 0
+        while i < n:
 
-        self.MoveJ(self.joint_angles[GRINDER + LEVER], 'Correct joint angles')
-        self.MoveJ(global2start, 'Move to lever')
-        self.MoveJ(mid_pull, 'Pull grinder lever')
-        self.MoveJ(angle * self.frames[TOOL + TCP], 'Change angle')
-        self.MoveJ(end_pull, 'Pull grinder lever')
-        self.MoveJ(release, 'Release lever')
+            self.MoveJ(self.joint_angles[GRINDER + LEVER], 'Correct joint angles')
+            self.MoveJ(global2start, 'Move to lever')
+            self.MoveJ(mid_pull, 'Pull grinder lever')
+            self.MoveJ(angle * self.frames[TOOL + TCP], 'Change angle')
+            self.MoveJ(end_pull, 'Pull grinder lever')
+            self.MoveJ(release, 'Release lever')
+            i++
+
         self.tool_mount(GRINDER, False)
         self.MoveJ(self.frames[HOME])
 
@@ -273,9 +279,9 @@ def main():
 
     # machine.insert_filter_grinder()
     # machine.turn_on_grinder()
-    # machine.pull_lever()
+    machine.pull_lever()
     # machine.scrape_filter()
-    machine.tamp_filter()
+    # machine.tamp_filter()
     # machine.turn_on_silvia()
     # machine.cup_from_stack()
 
