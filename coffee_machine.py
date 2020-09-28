@@ -12,15 +12,15 @@ COMMAND_WAIT = 15
 STRIP = 10
 HALFPI = 1.570796326794897
 
-GRINDERFUNC = 'Grinder Tool'
-FILTERFUNC = 'Portafilter Tool'
-CUPFUNC = 'Cup Tool'
-ATTACH = ' Attach'
-DETACH = ' Detach'
-STAND = 'Stand'
-OPEN = ' Open'
-CLOSE = ' Close'
-HOME = 'Home'
+GRINDERFUNC = "Grinder Tool"
+FILTERFUNC = "Portafilter Tool"
+CUPFUNC = "Cup Tool"
+ATTACH = " Attach"
+DETACH = " Detach"
+STAND = "Stand"
+OPEN = " Open"
+CLOSE = " Close"
+HOME = "Home"
 
 
 class CoffeeMachine(object):
@@ -78,8 +78,8 @@ class CoffeeMachine(object):
         self.log('\n' + STRIP * '-' + ' Insert filter in grinder ' + '-' * STRIP)
         self.MoveJ(self.frames[HOME], HOME)
         global2ball = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + BALL]  # * rdk.roty(0.1309)
-        filter_in_slot = self.frames[GLOBAL+FILTER] * self.frames[TCP + TOOL] * self.frames[TOOL + FILTER] * rdk.roty(-0.1) \
-                        * self.frames[FILTER + TOOL] * rdk.transl(-6, 2, 0) * self.frames[TOOL + TCP]
+        filter_in_slot = self.frames[GLOBAL+FILTER] * self.frames[TCP + TOOL] * self.frames[TOOL + FILTER] * rdk.roty(-0.05) * rdk.transl(2, 0, 0) \
+                        * self.frames[FILTER + TOOL] * rdk.transl(-4, 2, 4) * self.frames[TOOL + TCP]
         tool_on_ball = global2ball * self.frames[BALL + TOOL] * self.frames[TOOL + TCP] * rdk.roty(0.1309)
 
         self.tool_mount(FILTER, True)
@@ -90,6 +90,7 @@ class CoffeeMachine(object):
         # self.MoveJ(self.frames[GLOBAL + FILTER])
         self.MoveJ(filter_in_slot, 'Insert filter')
         # self.MoveJ(self.joint_angles['filterinsert'], 'filter insert')
+        rdk.pause(5)
         self.tool_mount(FILTER, False, GRINDER)
         # self.MoveJ(self.joint_angles['filterentry'], 'filter entry')
 
@@ -173,15 +174,15 @@ class CoffeeMachine(object):
     def pull_lever(self):
         self.log('\n' + STRIP * '-' + ' Pull lever ' + '-' * STRIP)
 
-        n = 3 # amount of times leaver needs to be pulled
+        n = 1  # amount of times leaver needs to be pulled
 
         global2start = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + LEVER] * rdk.transl(-5, -20, 0) \
                        * self.frames[PULLER + TOOL] * self.frames[TOOL + TCP]
         mid_pull = global2start * rdk.transl(0, 0, -50)
         angle = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + LEVER] * rdk.transl(-5, -20, 0) \
                 * rdk.transl(0, 0, -50) * rdk.roty(0.436332) * self.frames[PULLER + TOOL]
-        end_pull = angle * rdk.transl(0, 0, -40) * self.frames[TOOL + TCP]
-        release = angle * rdk.transl(0, 0, -40) * rdk.transl(50, -50, 0) * self.frames[TOOL + TCP]
+        end_pull = angle * rdk.transl(0, 0, -45) * self.frames[TOOL + TCP]
+        release = angle * rdk.transl(0, 0, -45) * rdk.transl(50, -50, 0) * self.frames[TOOL + TCP]
         i = 0
         while i < n:
 
@@ -191,7 +192,7 @@ class CoffeeMachine(object):
             self.MoveJ(angle * self.frames[TOOL + TCP], 'Change angle')
             self.MoveJ(end_pull, 'Pull grinder lever')
             self.MoveJ(release, 'Release lever')
-            i++
+            i += 1
 
         self.tool_mount(GRINDER, False)
         self.MoveJ(self.frames[HOME])
@@ -203,8 +204,8 @@ class CoffeeMachine(object):
         self.MoveJ(self.joint_angles['filterentry'], 'filter entry')
         self.tool_mount(FILTER, True, GRINDER)
 
-        lift_off_ball = self.frames[GLOBAL+FILTER] * self.frames[TCP + TOOL] * self.frames[TOOL + FILTER] * rdk.roty(-0.1) \
-                        * self.frames[FILTER + TOOL] * rdk.transl(-6, 2, 0) * self.frames[TOOL + TCP]
+        lift_off_ball = self.frames[GLOBAL+FILTER] * self.frames[TCP + TOOL] * self.frames[TOOL + FILTER] * rdk.roty(-0.05) * rdk.transl(2, 0, 0) \
+                        * self.frames[FILTER + TOOL] * rdk.transl(-4, 2, 4) * self.frames[TOOL + TCP]
         pull_out = lift_off_ball * rdk.transl(0, 0, -70)
         level = pull_out * self.frames[TCP + TOOL] * rdk.roty(0.1) \
                 * self.frames[TOOL + TCP]
@@ -213,9 +214,10 @@ class CoffeeMachine(object):
         self.MoveL(pull_out, 'Pull out filter')
         self.MoveJ(level, 'Level out filter')
 
-        global2scraper = self.frames[GLOBAL + CROSS] * self.frames[CROSS + SCRAPER]
-        start = global2scraper * rdk.transl(0, 0, -60) * self.frames[SCRAPER + FILTER] * self.frames[FILTER + TOOL] \
-                * self.frames[TOOL + TCP]
+        scraper_height = 0
+        global2scraper = self.frames[GLOBAL + CROSS] * self.frames[CROSS + SCRAPER] * rdk.transl(scraper_height, 0, 0)
+        start = global2scraper * rdk.transl(0, 0, -60) * self.frames[SCRAPER + FILTER] \
+                * self.frames[FILTER + TOOL] * self.frames[TOOL + TCP]
         end = global2scraper * rdk.transl(0, 0, 40) * self.frames[SCRAPER + FILTER] * self.frames[FILTER + TOOL] \
               * self.frames[TOOL + TCP]
 
@@ -245,7 +247,7 @@ class CoffeeMachine(object):
     def insert_filter_silvia(self):
         self.log('\n' + STRIP * '-' + ' Move filter to silvia ' + '-' * STRIP)
 
-        self.MoveJ(self.joint_angles[TAMPER + 'entry'], 'Move to tamper') # For testing
+        self.MoveJ(self.joint_angles[TAMPER + 'entry'], 'Move to tamper')  # For testing
         entry = rdk.rotz(-HALFPI) * self.robot.Pose()
 
         self.MoveJ(entry)
@@ -283,11 +285,11 @@ def main():
 
     # Run subprograms
 
-    # machine.insert_filter_grinder()
-    # machine.turn_on_grinder()
-    # machine.pull_lever()
-    # machine.scrape_filter()
-    # machine.tamp_filter()
+    machine.insert_filter_grinder()
+    machine.turn_on_grinder()
+    machine.pull_lever()
+    machine.scrape_filter()
+    machine.tamp_filter()
     # machine.insert_filter_silvia()
     # machine.turn_on_silvia()
     machine.cup_from_stack()
