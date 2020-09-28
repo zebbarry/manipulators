@@ -17,7 +17,7 @@ za = [0 0 1];
 xb = axis_norm;
 angle = acos(dot(xb, xa));
 rad2deg(angle)
-angle = deg2rad(-7.5);
+angle = deg2rad(-90);
 
 transformX = [1 0 0;
               0 cos(angle) -sin(angle);
