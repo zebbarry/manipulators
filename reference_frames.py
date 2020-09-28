@@ -19,9 +19,11 @@ SCRAPER = "scraper"
 TAMPER = "tamper"
 BALL = "ball"
 ENTRY = "entry"
-SILVIAPOWER = "silviapower"
+SILVIAPOWERON = "silviapoweron"
+SILVIAPOWEROFF = "silviapoweroff"
 GRINDERPOWERON = "grinderpoweron"
 GRINDERPOWEROFF = "grinderpoweroff"
+
 
 
 def read_frames(filename):
