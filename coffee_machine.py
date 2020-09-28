@@ -255,8 +255,12 @@ class CoffeeMachine(object):
     def select_coffee(self):
         pass
 
-    def pickup_cup(self):
-        pass
+    def place_cup(self):
+        self.log('\n' + STRIP * '-' + ' Cup to Silvia ' + '-' * STRIP)
+        global2end = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + silviacup] #\
+                     #* self.frames[PUSHER + TOOL] * self.frames[TOOL + TCP]
+        #start = global2end * self.frames[]
+        self.MoveJ(global2end, 'Cup entry')
 
 
 def main():
@@ -285,15 +289,16 @@ def main():
 
     # Run subprograms
 
-    machine.insert_filter_grinder()
-    machine.turn_on_grinder()
-    machine.pull_lever()
-    machine.scrape_filter()
-    machine.tamp_filter()
+    # machine.insert_filter_grinder()
+    # machine.turn_on_grinder()
+    # machine.pull_lever()
+    # machine.scrape_filter()
+    # machine.tamp_filter()
     # machine.insert_filter_silvia()
     # machine.turn_on_silvia()
     machine.cup_from_stack()
-
+    machine.place_cup()
+    
     machine.close_log()
 
 
