@@ -78,8 +78,9 @@ class CoffeeMachine(object):
         self.log("\n" + STRIP * "-" + " Insert filter in grinder " + "-" * STRIP)
         self.MoveJ(self.frames[HOME], HOME)
         global2ball = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + BALL]  # * rdk.roty(0.1309)
-        filter_in_slot = self.frames[GLOBAL+FILTER] * self.frames[TCP + TOOL] * self.frames[TOOL + FILTER] * rdk.roty(-0.04) * rdk.transl(-2, 0, 0) \
-                        * self.frames[FILTER + TOOL] * rdk.transl(0, 0, 4) * self.frames[TOOL + TCP]
+        self.frames[GLOBAL+FILTER+ENTRY] = self.frames[GLOBAL+FILTER] * self.frames[TCP + TOOL] * \
+                                           self.frames[TOOL + FILTER] * rdk.roty(-0.04) * rdk.transl(-2, 0, 0) \
+                                           * self.frames[FILTER + TOOL] * rdk.transl(0, 0, 4) * self.frames[TOOL + TCP]
         filter_over_ball = rdk.transl(0, 0, 60) * global2ball * rdk.roty(-0.1) * self.frames[FILTER + TOOL] \
                            * self.frames[TOOL + TCP]
 
@@ -87,7 +88,7 @@ class CoffeeMachine(object):
         self.MoveJ(rdk.rotz(HALFPI) * self.frames[GLOBAL + FILTERMOUNT], "Intermediate point")
         self.MoveJ(self.joint_angles[FILTER + ENTRY], "Filter entry point")
         # self.MoveJ(filter_over_ball)
-        self.MoveL(filter_in_slot, "Insert filter")
+        self.MoveL(self.frames[GLOBAL+FILTER+ENTRY], "Insert filter")
         self.tool_mount(FILTER, False, GRINDER)
         self.MoveJ(self.joint_angles[FILTER + ENTRY], "Filter entry point")
 
@@ -201,8 +202,7 @@ class CoffeeMachine(object):
         self.MoveJ(self.joint_angles["filterentry"], "filter entry")
         self.tool_mount(FILTER, True, GRINDER)
 
-        lift_off_ball = self.frames[GLOBAL+FILTER] * self.frames[TCP + TOOL] * self.frames[TOOL + FILTER] * rdk.roty(-0.04) * rdk.transl(-2, 0, 0) \
-                        * self.frames[FILTER + TOOL] * rdk.transl(0, 0, 4) * self.frames[TOOL + TCP]
+        lift_off_ball = self.frames[GLOBAL+FILTER+ENTRY]
         pull_out = lift_off_ball * rdk.transl(0, 0, -70)
         level = pull_out * self.frames[TCP + TOOL] * rdk.roty(0.1) \
                 * self.frames[TOOL + TCP]
@@ -211,7 +211,7 @@ class CoffeeMachine(object):
         self.MoveL(pull_out, "Pull out filter")
         self.MoveJ(level, "Level out filter")
 
-        scraper_height = 0
+        scraper_height = 8
         global2scraper = self.frames[GLOBAL + CROSS] * self.frames[CROSS + SCRAPER] * rdk.transl(scraper_height, 0, 0)
         start = global2scraper * rdk.transl(0, 0, -60) * self.frames[SCRAPER + FILTER] \
                 * self.frames[FILTER + TOOL] * self.frames[TOOL + TCP]
@@ -249,15 +249,12 @@ class CoffeeMachine(object):
 
         self.MoveJ(entry)
 
-    def select_coffee(self):
-        pass
-
     def place_cup(self):
         self.log('\n' + STRIP * '-' + ' Cup to Silvia ' + '-' * STRIP)
-        global2end = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + silviacup] #\
-                     #* self.frames[PUSHER + TOOL] * self.frames[TOOL + TCP]
-        #start = global2end * self.frames[]
-        self.MoveJ(global2end, 'Cup entry')
+        # global2end = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + silviacup] #\
+        #              #* self.frames[PUSHER + TOOL] * self.frames[TOOL + TCP]
+        # #start = global2end * self.frames[]
+        # self.MoveJ(global2end, 'Cup entry')
 
 
 def main():
@@ -286,26 +283,15 @@ def main():
 
     # Run subprograms
 
-<<<<<<< HEAD
-    # machine.insert_filter_grinder()
-=======
     machine.insert_filter_grinder()
->>>>>>> 63dc3088ee25410a3ba3198619e8e05f3d2bba31
     # machine.turn_on_grinder()
     # machine.pull_lever()
-    # machine.scrape_filter()
-    # machine.tamp_filter()
+    machine.scrape_filter()
+    machine.tamp_filter()
     # machine.insert_filter_silvia()
     # machine.turn_on_silvia()
-<<<<<<< HEAD
-    machine.cup_from_stack()
-    machine.place_cup()
-    
-=======
     # machine.cup_from_stack()
-
->>>>>>> 63dc3088ee25410a3ba3198619e8e05f3d2bba31
-    machine.close_log()
+    # machine.place_cup()
 
 
 main()
