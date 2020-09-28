@@ -1,36 +1,37 @@
 import robodk as rdk
 
-GLOBAL = 'global'
-SILVIA = 'silvia'
-GRINDER = 'grinder'
-CUPSTACK = 'cupstack'
-CUP = 'cup'
-CROSS = 'cross'
-TCP = 'tcp'
-TOOL = 'tool'
-PUSHER = 'pusher'
-PULLER = 'puller'
-LEVER = 'lever'
-GRINDERMOUNT = 'grindermount'
-FILTERMOUNT = 'filtermount'
-CUPMOUNT = 'cupmount'
+GLOBAL = "global"
+SILVIA = "silvia"
+GRINDER = "grinder"
+CUPSTACK = "cupstack"
+CUP = "cup"
+CROSS = "cross"
+TCP = "tcp"
+TOOL = "tool"
+PUSHER = "pusher"
+PULLER = "puller"
+LEVER = "lever"
+GRINDERMOUNT = "grindermount"
+FILTERMOUNT = "filtermount"
+CUPMOUNT = "cupmount"
 FILTER = "filter"
-SCRAPER = 'scraper'
-TAMPER = 'tamper'
-BALL = 'ball'
-SILVIAPOWER = 'silviapower'
-GRINDERPOWERON = 'grinderpoweron'
-GRINDERPOWEROFF = 'grinderpoweroff'
+SCRAPER = "scraper"
+TAMPER = "tamper"
+BALL = "ball"
+ENTRY = "entry"
+SILVIAPOWER = "silviapower"
+GRINDERPOWERON = "grinderpoweron"
+GRINDERPOWEROFF = "grinderpoweroff"
 
 
 def read_frames(filename):
-    file = open(filename, 'r')
+    file = open(filename, "r")
     lines = file.readlines()
     file.close()
 
     frames = {}
     for line in lines:
-        segments = line.rstrip().split(',')
+        segments = line.rstrip().split(",")
         name = segments[0]
         values = [float(i) for i in segments[1:]]
         transform = rdk.Mat([values[0:4],
@@ -42,13 +43,13 @@ def read_frames(filename):
 
 
 def read_joint_angles(filename):
-    file = open(filename, 'r')
+    file = open(filename, "r")
     lines = file.readlines()
     file.close()
 
     joint_angles = {}
     for line in lines:
-        segments = line.rstrip().split(',')
+        segments = line.rstrip().split(",")
         name = segments[0]
         values = [float(i) for i in segments[1:]]
         angles = rdk.Mat(values)
