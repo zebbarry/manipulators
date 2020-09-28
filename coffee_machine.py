@@ -169,7 +169,7 @@ class CoffeeMachine(object):
         self.MoveJ(release, "Release off button")
         self.MoveJ(intermediate_point, "Avoid grinder")
 
-    def pull_lever(self, n_pulls):
+    def pull_lever_multiple(self, n_pulls):
         self.log("\n" + STRIP * "-" + " Pull lever " + "-" * STRIP)
 
         global2start = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + LEVER] * rdk.transl(-5, -20, 0) \
@@ -178,18 +178,26 @@ class CoffeeMachine(object):
         angle = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + LEVER] * rdk.transl(-5, -20, 0) \
                 * rdk.transl(0, 0, -50) * rdk.roty(0.436332) * self.frames[PULLER + TOOL]
         end_pull = angle * rdk.transl(0, 0, -50) * self.frames[TOOL + TCP]
-        release = angle * rdk.transl(0, 0, -50) * rdk.transl(50, -50, 0) * self.frames[TOOL + TCP]
+        exit_pos = angle * rdk.transl(0, 0, -50) * rdk.transl(50, -50, 0) * self.frames[TOOL + TCP]
 
+        def pull(machine):
+            machine.MoveJ(global2start, "Move to lever")
+            machine.MoveJ(mid_pull, "Pull grinder lever")
+            machine.MoveJ(angle * self.frames[TOOL + TCP], "Change angle")
+            machine.MoveJ(end_pull, "Pull grinder lever")
+
+        def release(machine):
+            machine.MoveJ(angle * self.frames[TOOL + TCP], "Change angle")
+            machine.MoveJ(mid_pull, "Pull grinder lever")
+            machine.MoveJ(global2start, "Move to lever")
+
+        self.MoveJ(self.joint_angles[GRINDER + LEVER], "Correct joint angles")
         for i in range(n_pulls):
+            pull(self)
+            if i < n_pulls - 1:
+                release(self)
 
-            self.MoveJ(self.joint_angles[GRINDER + LEVER], "Correct joint angles")
-            self.MoveJ(global2start, "Move to lever")
-            self.MoveJ(mid_pull, "Pull grinder lever")
-            self.MoveJ(angle * self.frames[TOOL + TCP], "Change angle")
-            self.MoveJ(end_pull, "Pull grinder lever")
-            i += 1
-
-        self.MoveJ(release, "Release lever")
+        self.MoveJ(exit_pos, "Release lever")
         self.tool_mount(GRINDER, False)
         self.MoveJ(self.frames[HOME])
 
@@ -285,7 +293,7 @@ def main():
 
     # machine.insert_filter_grinder()
     machine.turn_on_grinder()
-    machine.pull_lever(N)
+    machine.pull_lever_multiple(N)
     # machine.scrape_filter()
     # machine.tamp_filter()
     # machine.insert_filter_silvia()
