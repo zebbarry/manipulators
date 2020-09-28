@@ -288,9 +288,9 @@ def main():
     # machine.pull_lever()
     # machine.scrape_filter()
     # machine.tamp_filter()
-    machine.insert_filter_silvia()
+    # machine.insert_filter_silvia()
     # machine.turn_on_silvia()
-    # machine.cup_from_stack()
+    machine.cup_from_stack()
 
     machine.close_log()
 
