@@ -250,7 +250,6 @@ class CoffeeMachine(object):
     def place_cup(self, height):
         self.log('\n' + STRIP * '-' + ' Cup to Silvia ' + '-' * STRIP)
 
-        self.frames[CUP + TOOL] = self.frames[TOOL + CUP + SILVIA].inv()
         end_point = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 7, 0) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
 
@@ -357,13 +356,13 @@ def main():
 
     # machine.insert_filter_grinder()
     # machine.turn_on_grinder()
-    # machine.pull_lever(N)
+    # machine.pull_lever_multiple(N)
     # machine.scrape_filter(scraper_height)
     # machine.tamp_filter(tamp_height)
     # machine.insert_filter_silvia()
-    # machine.cup_from_stack()
-    # machine.place_cup(height)
-    # machine.turn_on_silvia(time)
+    machine.cup_from_stack()
+    machine.place_cup(height)
+    machine.turn_on_silvia(time)
     machine.pickup_coffee(height)
 
 
