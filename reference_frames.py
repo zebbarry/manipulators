@@ -25,7 +25,6 @@ GRINDERPOWERON = "grinderpoweron"
 GRINDERPOWEROFF = "grinderpoweroff"
 
 
-
 def read_frames(filename):
     file = open(filename, "r")
     lines = file.readlines()
