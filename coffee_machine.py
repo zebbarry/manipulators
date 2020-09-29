@@ -258,9 +258,9 @@ class CoffeeMachine(object):
         self.MoveJ(entry)
 
     def place_cup(self):
-        height = 75
         self.log('\n' + STRIP * '-' + ' Cup to Silvia ' + '-' * STRIP)
-        self.frames[CUP + TOOL] = self.frames[TOOL + CUP].inv()
+
+        height = 75
         global2end = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
              * self.frames[CUP + TOOL] * rdk.transl(height, -150, 180) * rdk.rotx(-HALFPI) * self.frames[TOOL + TCP]
         self.MoveJ(self.joint_angles['cupentry'], 'CupEntry')
@@ -275,7 +275,18 @@ class CoffeeMachine(object):
         self.tool_mount(CUP, False)
 
     def pickup_coffee(self):
-        pass
+        self.log('\n' + STRIP * '-' + ' Cup to Rodney ' + '-' * STRIP)
+        height = 75
+        self.frames[SILVIA+CUP + TOOL] = self.frames[TOOL + CUP+ SILVIA].inv()
+        intermediate_point = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
+             #* self.frames[SILVIA+CUP + TOOL] * rdk.transl(0, 0, 0) #* self.frames[TOOL + TCP] #* rdk.transl(0, -150, -20)* rdk.rotx(-HALFPI) 
+
+        # pick_up_pos = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
+        #      * self.frames[CUP + TOOL] * rdk.transl(height, -150, 180) * rdk.rotx(-HALFPI) * self.frames[TOOL + TCP]
+        # self.tool_mount(CUP, True)
+        self.MoveJ(self.joint_angles['cupinter'], 'CupIntermediate')
+        self.MoveJ(intermediate_point, 'Intermediate point before pick up')
+        # self.MoveJ(pick_up_pos)
 
 
 
@@ -302,20 +313,22 @@ def main():
     machine.frames[FILTER + TOOL] = machine.frames[TOOL + FILTER].inv()
     machine.frames[PUSHER + TOOL] = machine.frames[TOOL + PUSHER].inv()
     machine.frames[PULLER + TOOL] = machine.frames[TOOL + PULLER].inv()
+    machine.frames[CUP + TOOL] = machine.frames[TOOL + CUP].inv()
 
     # Run subprograms
 
     N = 3  # amount of times leaver needs to be pulled
 
     # machine.insert_filter_grinder()
-    machine.turn_on_grinder()
-    machine.pull_lever(N)
+    # machine.turn_on_grinder()
+    # machine.pull_lever(N)
     # machine.scrape_filter()
     # machine.tamp_filter()
     # machine.insert_filter_silvia()
-    # machine.turn_on_silvia()
     # machine.cup_from_stack()
     # machine.place_cup()
+    # machine.turn_on_silvia()
+    machine.pickup_coffee()
 
 
 main()
