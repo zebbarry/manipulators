@@ -65,12 +65,12 @@ class CoffeeMachine(object):
         if location == STAND:
             self.MoveJ(self.joint_angles[mount], mount)
             # self.MoveJ(self.frames[GLOBAL + mount], mount)    # Not needed as joint angles already calculated.
-            self.robot.setPoseTool(self.master_tool)
 
         operation = ATTACH if pickup else DETACH
         name = func + operation + " (" + location.capitalize() + ")"
         self.log("Tool Mount Operation - Tool: {}, Operation:{}".format(name, operation))
         self.RDK.RunProgram(name, True)
+        self.robot.setPoseTool(self.master_tool)
 
     def cup_tool(self, operation):
         name = CUPFUNC + operation
@@ -160,7 +160,7 @@ class CoffeeMachine(object):
         self.tool_mount(GRINDER, False)
         self.MoveJ(self.frames[HOME])
 
-    def scrape_filter(self):
+    def scrape_filter(self, scraper_height):
         self.log("\n" + STRIP * "-" + " Scrape coffee from filter " + "-" * STRIP)
         self.MoveJ(self.frames[HOME])
 
@@ -176,7 +176,6 @@ class CoffeeMachine(object):
         self.MoveL(pull_out, "Pull out filter")
         # self.MoveJ(level, "Level out filter")
 
-        scraper_height = 8  # TODO: think works but not sure
         global2scraper = self.frames[GLOBAL + CROSS] * self.frames[CROSS + SCRAPER] * rdk.transl(scraper_height, 0, 0)
         start = global2scraper * rdk.transl(0, 0, -60) * self.frames[SCRAPER + FILTER] \
             * self.frames[FILTER + TOOL] * self.frames[TOOL + TCP]
@@ -187,7 +186,7 @@ class CoffeeMachine(object):
         self.MoveL(end, "Push through scraper")
         self.MoveL(start, "Pull through scraper")
 
-    def tamp_filter(self):
+    def tamp_filter(self, depth):
         self.log("\n" + STRIP * "-" + " Tamp coffee filter " + "-" * STRIP)
 
         global2tamper = self.frames[GLOBAL + CROSS] * self.frames[CROSS + TAMPER]
@@ -195,7 +194,7 @@ class CoffeeMachine(object):
             self.frames[FILTER + TOOL] * self.frames[TOOL + TCP]
         start = global2tamper * self.frames[TAMPER + FILTER] * self.frames[FILTER + TOOL] \
             * self.frames[TOOL + TCP]
-        depth = 15  # TODO: Test
+
         end = global2tamper * self.frames[SCRAPER + FILTER] * rdk.transl(depth, 0, 0) * self.frames[FILTER + TOOL] \
             * self.frames[TOOL + TCP]
 
@@ -237,8 +236,7 @@ class CoffeeMachine(object):
         self.MoveJ(self.joint_angles[CUPSTACK + ENTRY], "Move to correct orientation")  # get correct orientation
         self.MoveJ(intermediate)
 
-        diff_height = 0
-        before_cup = rdk.transl(diff_height, 100, 0) * cup_pickup_matrix
+        before_cup = rdk.transl(0, 100, 0) * cup_pickup_matrix
         self.MoveL(before_cup, "Move to cup level")
         self.cup_tool(OPEN)
 
@@ -249,10 +247,9 @@ class CoffeeMachine(object):
         self.MoveL(remove_cup, "Remove cup")
         self.MoveJ(self.joint_angles["rotated"+CUP], "Rotate cup")
 
-    def place_cup(self):
+    def place_cup(self, height):
         self.log('\n' + STRIP * '-' + ' Cup to Silvia ' + '-' * STRIP)
 
-        height = 80
         self.frames[CUP + TOOL] = self.frames[TOOL + CUP + SILVIA].inv()
         end_point = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 7, 0) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
@@ -271,10 +268,8 @@ class CoffeeMachine(object):
         self.MoveJ(out)
         self.tool_mount(CUP, False)
 
-    def turn_on_silvia(self):
+    def turn_on_silvia(self, time):
         self.log("\n" + STRIP * "-" + " Turn on coffee machine " + "-" * STRIP)
-
-        time = 3    # TODO: Set to 12s for actual test
 
         self.tool_mount(GRINDER, True)
         # self.MoveJ(self.joint_angles[GRINDERMOUNT], GRINDERMOUNT)
@@ -300,13 +295,11 @@ class CoffeeMachine(object):
         self.MoveJ(intermediate_point, "Avoid tools")
         self.tool_mount(GRINDER, False)
 
-    def pickup_coffee(self):
+    def pickup_coffee(self, height):
         self.log('\n' + STRIP * '-' + ' Cup to Rodney ' + '-' * STRIP)
-        self.tool_mount(CUP, True)
-        # self.MoveJ(self.joint_angles[CUPMOUNT])  # For testing
-        self.frames[CUP + TOOL] = self.frames[TOOL + CUP + SILVIA].inv()
+        # self.tool_mount(CUP, True)
+        self.MoveJ(self.joint_angles[CUPMOUNT])  # For testing
 
-        height = 80
         end_point = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 7, 0) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
 
@@ -356,18 +349,22 @@ def main():
     # Run subprograms
 
     N = 3  # amount of times leaver needs to be pulled
+    height = 80  # cup height
+    time = 3    # TODO: Set to 12s for actual test
+    scraper_height = 8  # TODO: think works but not sure
+    tamp_height = 15  # TODO: Test
     machine.robot.setPoseTool(machine.master_tool)
 
     # machine.insert_filter_grinder()
     # machine.turn_on_grinder()
     # machine.pull_lever(N)
-    # machine.scrape_filter()
-    # machine.tamp_filter()
+    # machine.scrape_filter(scraper_height)
+    # machine.tamp_filter(tamp_height)
     # machine.insert_filter_silvia()
     # machine.cup_from_stack()
-    machine.place_cup()
-    # machine.turn_on_silvia()
-    machine.pickup_coffee()
+    # machine.place_cup(height)
+    # machine.turn_on_silvia(time)
+    machine.pickup_coffee(height)
 
 
 main()
