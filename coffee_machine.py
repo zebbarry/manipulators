@@ -97,7 +97,6 @@ class CoffeeMachine(object):
         self.log('\n' + STRIP * '-' + ' Get cup from stack ' + '-' * STRIP)
         self.MoveJ(self.frames[HOME], HOME)
         self.tool_mount(CUP, True)
-        self.frames[CUP + TOOL] = self.frames[TOOL + CUP].inv()
         cup_pickup_matrix = self.frames[GLOBAL + CUPSTACK] * self.frames[CUPSTACK + CUP] \
                             * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
 
@@ -260,33 +259,49 @@ class CoffeeMachine(object):
     def place_cup(self):
         self.log('\n' + STRIP * '-' + ' Cup to Silvia ' + '-' * STRIP)
 
-        height = 75
-        global2end = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
-             * self.frames[CUP + TOOL] * rdk.transl(height, -150, 180) * rdk.rotx(-HALFPI) * self.frames[TOOL + TCP]
+        height = 80
+        self.frames[SILVIA+CUP + TOOL] = self.frames[TOOL + CUP+ SILVIA].inv()
+        end_point = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
+             * rdk.transl(height, 7, 0) * self.frames[SILVIA+CUP + TOOL] * self.frames[TOOL + TCP]
+
         self.MoveJ(self.joint_angles['cupentry'], 'CupEntry')
-        self.MoveJ(global2end, 'Cup entry')
+        self.MoveJ(end_point, 'Cup entry')
         rdk.pause(2)
         self.cup_tool(OPEN)
-        # Might need to add a linear move downwards to get the cup to sit on the surface of silvia
-        drop_cup = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
-             * self.frames[CUP + TOOL] * rdk.transl(height, -150, 180) * rdk.transl(0, -150, -20)* rdk.rotx(-HALFPI) * self.frames[TOOL + TCP]
-        self.MoveJ(drop_cup)
+
+        inter = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
+             * rdk.transl(height, 15, -100) * self.frames[SILVIA+CUP + TOOL] * self.frames[TOOL + TCP]
+        out = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
+             * rdk.transl(height, 50, -150) * self.frames[SILVIA+CUP + TOOL] * self.frames[TOOL + TCP]
+        self.MoveJ(inter)
         self.cup_tool(CLOSE)
+        self.MoveJ(out)
         self.tool_mount(CUP, False)
 
     def pickup_coffee(self):
         self.log('\n' + STRIP * '-' + ' Cup to Rodney ' + '-' * STRIP)
-        height = 75
-        self.frames[SILVIA+CUP + TOOL] = self.frames[TOOL + CUP+ SILVIA].inv()
-        intermediate_point = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
-             #* self.frames[SILVIA+CUP + TOOL] * rdk.transl(0, 0, 0) #* self.frames[TOOL + TCP] #* rdk.transl(0, -150, -20)* rdk.rotx(-HALFPI) 
+        height = 80
 
-        # pick_up_pos = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
-        #      * self.frames[CUP + TOOL] * rdk.transl(height, -150, 180) * rdk.rotx(-HALFPI) * self.frames[TOOL + TCP]
+        self.frames[SILVIA+CUP + TOOL] = self.frames[TOOL + CUP+ SILVIA].inv()
+
+        end_point = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
+             * rdk.transl(height, 7, 0) * self.frames[SILVIA+CUP + TOOL] * self.frames[TOOL + TCP]
+
+        inter = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
+             * rdk.transl(height, 15, -100) * self.frames[SILVIA+CUP + TOOL] * self.frames[TOOL + TCP]
+
+        out = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
+             * rdk.transl(height, 50, -150) * self.frames[SILVIA+CUP + TOOL] * self.frames[TOOL + TCP]
+        # self.MoveJ(self.joint_angles['goodluck'], 'CupEntry')
+        # rdk.pause(5)
+        # self.MoveJ(self.joint_angles['pickupcoffee'])
         # self.tool_mount(CUP, True)
-        self.MoveJ(self.joint_angles['cupinter'], 'CupIntermediate')
-        self.MoveJ(intermediate_point, 'Intermediate point before pick up')
-        # self.MoveJ(pick_up_pos)
+        # self.MoveJ(self.joint_angles['ha'])
+        # self.MoveJ(out, 'Cup entry')
+        self.MoveJ(inter)
+        # self.cup_tool(OPEN)
+        self.MoveJ(end_point)
+        # self.cup_tool(CLOSE)
 
 
 
