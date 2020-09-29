@@ -26,8 +26,9 @@ HOME = "Home"
 
 class CoffeeMachine(object):
 
-    def __init__(self, robot, RDK, frames, joint_angles, log_filename="~/log.txt"):
+    def __init__(self, robot, master_tool, RDK, frames, joint_angles, log_filename="~/log.txt"):
         self.robot = robot
+        self.master_tool = master_tool
         self.frames = frames
         self.joint_angles = joint_angles
         self.RDK = RDK
@@ -64,6 +65,7 @@ class CoffeeMachine(object):
         if location == STAND:
             self.MoveJ(self.joint_angles[mount], mount)
             # self.MoveJ(self.frames[GLOBAL + mount], mount)    # Not needed as joint angles already calculated.
+            self.robot.setPoseTool(self.master_tool)
 
         operation = ATTACH if pickup else DETACH
         name = func + operation + " (" + location.capitalize() + ")"
@@ -222,8 +224,8 @@ class CoffeeMachine(object):
         self.log("\n" + STRIP * "-" + " Get cup from stack " + "-" * STRIP)
         # TODO: Compare start with finish of insert_filter_silvia() to compare
         # self.MoveJ(self.frames[HOME], HOME)
-        # self.tool_mount(CUP, True)
-        self.MoveJ(self.joint_angles[CUPMOUNT])   # For testing
+        self.tool_mount(CUP, True)
+        # self.MoveJ(self.joint_angles[CUPMOUNT])   # For testing
 
         cup_pickup_matrix = self.frames[GLOBAL + CUPSTACK] * self.frames[CUPSTACK + CUP] \
             * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
@@ -235,8 +237,8 @@ class CoffeeMachine(object):
         self.MoveJ(self.joint_angles[CUPSTACK + ENTRY], "Move to correct orientation")  # get correct orientation
         self.MoveJ(intermediate)
 
-        height = 0
-        before_cup = rdk.transl(height, 100, 0) * cup_pickup_matrix
+        diff_height = 0
+        before_cup = rdk.transl(diff_height, 100, 0) * cup_pickup_matrix
         self.MoveL(before_cup, "Move to cup level")
         self.cup_tool(OPEN)
 
@@ -251,9 +253,9 @@ class CoffeeMachine(object):
         self.log('\n' + STRIP * '-' + ' Cup to Silvia ' + '-' * STRIP)
 
         height = 80
-        self.frames[SILVIA+CUP + TOOL] = self.frames[TOOL + CUP + SILVIA].inv()
+        self.frames[CUP + TOOL] = self.frames[TOOL + CUP + SILVIA].inv()
         end_point = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
-            * rdk.transl(height, 7, 0) * self.frames[SILVIA+CUP + TOOL] * self.frames[TOOL + TCP]
+            * rdk.transl(height, 7, 0) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
 
         self.MoveJ(self.joint_angles['cupentry'], 'CupEntry')
         self.MoveJ(end_point, 'Cup entry')
@@ -261,9 +263,9 @@ class CoffeeMachine(object):
         self.cup_tool(OPEN)
 
         inter = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
-            * rdk.transl(height, 15, -100) * self.frames[SILVIA+CUP + TOOL] * self.frames[TOOL + TCP]
+            * rdk.transl(height, 15, -100) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
         out = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
-            * rdk.transl(height, 50, -150) * self.frames[SILVIA+CUP + TOOL] * self.frames[TOOL + TCP]
+            * rdk.transl(height, 50, -150) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
         self.MoveJ(inter)
         self.cup_tool(CLOSE)
         self.MoveJ(out)
@@ -300,19 +302,19 @@ class CoffeeMachine(object):
 
     def pickup_coffee(self):
         self.log('\n' + STRIP * '-' + ' Cup to Rodney ' + '-' * STRIP)
-        # self.tool_mount(CUP, True)
-        self.MoveJ(self.joint_angles[CUPMOUNT])  # For testing
-        self.frames[SILVIA+CUP + TOOL] = self.frames[TOOL + CUP + SILVIA].inv()
+        self.tool_mount(CUP, True)
+        # self.MoveJ(self.joint_angles[CUPMOUNT])  # For testing
+        self.frames[CUP + TOOL] = self.frames[TOOL + CUP + SILVIA].inv()
 
         height = 80
         end_point = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
-            * rdk.transl(height, 7, 0) * self.frames[SILVIA+CUP + TOOL] * self.frames[TOOL + TCP]
+            * rdk.transl(height, 7, 0) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
 
         inter = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
-            * rdk.transl(height, 15, -100) * self.frames[SILVIA+CUP + TOOL] * self.frames[TOOL + TCP]
+            * rdk.transl(height, 15, -100) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
 
         out = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
-            * rdk.transl(height, 50, -150) * self.frames[SILVIA+CUP + TOOL] * self.frames[TOOL + TCP]
+            * rdk.transl(height, 50, -150) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
         # self.MoveJ(self.joint_angles['goodluck'], 'CupEntry')
         # rdk.pause(5)
         # self.MoveJ(self.joint_angles['pickupcoffee'])
@@ -338,10 +340,11 @@ def main():
     robot = RDK.Item("UR5")
     world_frame = RDK.Item("UR5 Base")
     home = RDK.Item("Home")  # existing target in station
+    master_tool = RDK.Item("Master Tool")
     robot.setPoseFrame(world_frame)
-    robot.setPoseTool(robot.PoseTool())
+    robot.setPoseTool(master_tool)
 
-    machine = CoffeeMachine(robot, RDK, frames, joint_angles, logfile)
+    machine = CoffeeMachine(robot, master_tool, RDK, frames, joint_angles, logfile)
     machine.frames[HOME] = home
     machine.frames[TOOL + TCP] = frames[TCP + TOOL].inv()
     machine.frames[BALL + TOOL] = machine.frames[TOOL + BALL].inv()
@@ -353,6 +356,7 @@ def main():
     # Run subprograms
 
     N = 3  # amount of times leaver needs to be pulled
+    machine.robot.setPoseTool(machine.master_tool)
 
     # machine.insert_filter_grinder()
     # machine.turn_on_grinder()
@@ -360,10 +364,10 @@ def main():
     # machine.scrape_filter()
     # machine.tamp_filter()
     # machine.insert_filter_silvia()
-    machine.cup_from_stack()
-    # machine.place_cup()
+    # machine.cup_from_stack()
+    machine.place_cup()
     # machine.turn_on_silvia()
-    # machine.pickup_coffee()
+    machine.pickup_coffee()
 
 
 main()
