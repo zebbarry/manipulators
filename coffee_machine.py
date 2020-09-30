@@ -109,7 +109,6 @@ class CoffeeMachine(object):
         push = global2on * rdk.transl(0, 0, 7)
         intermediate_point = rdk.rotz(0.9) * self.frames[GLOBAL + GRINDERMOUNT]
 
-        # TODO: Improve movement so stays inside perimeter
         self.MoveJ(intermediate_point, "Avoid silvia and cups")
         self.MoveJ(self.joint_angles[GRINDERPOWERON], "Move to on button")
         self.MoveJ(release, "Move to on button")
@@ -151,7 +150,6 @@ class CoffeeMachine(object):
             machine.MoveJ(mid_pull, "Pull grinder lever")
             machine.MoveJ(global2start, "Move to lever")
 
-        # TODO: Check angles
         self.MoveJ(self.joint_angles[GRINDER + LEVER], "Correct joint angles")
         for i in range(n_pulls):
             self.log("Lever pull # " + str(i))
