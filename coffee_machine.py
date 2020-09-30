@@ -319,15 +319,19 @@ class CoffeeMachine(object):
         self.MoveJ(inter)
         self.cup_tool(OPEN)
         self.MoveJ(end_point)
-
         self.cup_tool(CLOSE)
         self.MoveJ(inter)
         self.MoveJ(out)
-        up = rdk.transl(0, 0, 300) * out
+
+        up = rdk.transl(0, 0, 350) * out
+        down = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP+"place"] \
+            * rdk.transl(height-10, 0, 0) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
+        over_silvia = rdk.transl(0, 0, 50) * down
+
         self.MoveL(up)
-        # across = rdk.transl(-100, 0, 0) * up
-        # self.MoveL(across)
-        # self.cup_tool(OPEN)
+        self.MoveJ(over_silvia)
+        self.MoveJ(down)
+        self.cup_tool(OPEN)
 
 
 def main():
@@ -365,15 +369,15 @@ def main():
     tamp_height = 15  # TODO: Test
     machine.robot.setPoseTool(machine.master_tool)
 
-    machine.insert_filter_grinder()
-    machine.turn_on_grinder()
-    machine.pull_lever_multiple(N)
-    machine.scrape_filter(scraper_height)
-    machine.tamp_filter(tamp_height)
-    machine.insert_filter_silvia()
-    machine.cup_from_stack()
-    machine.place_cup(height)
-    machine.turn_on_silvia(time)
+    # machine.insert_filter_grinder()
+    # machine.turn_on_grinder()
+    # machine.pull_lever_multiple(N)
+    # machine.scrape_filter(scraper_height)
+    # machine.tamp_filter(tamp_height)
+    # machine.insert_filter_silvia()
+    # machine.cup_from_stack()
+    # machine.place_cup(height)
+    # machine.turn_on_silvia(time)
     machine.pickup_coffee(height)
 
 
