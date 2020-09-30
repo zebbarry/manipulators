@@ -272,7 +272,6 @@ class CoffeeMachine(object):
         rdk.pause(2)
         self.cup_tool(OPEN)
 
-
         self.MoveJ(inter)
         self.cup_tool(CLOSE)
         self.MoveJ(out)
@@ -333,10 +332,10 @@ class CoffeeMachine(object):
         self.cup_tool(CLOSE)
         self.MoveJ(inter)
         self.MoveJ(out)
-        up = rdk.transl(0, 0, 500) * out
-        accross = rdk.transl(-100, 0, 0) * up
+        up = rdk.transl(0, 0, 300) * out
+        across = rdk.transl(-100, 0, 0) * up
         self.MoveL(up)
-        # self.MoveL(accross)
+        # self.MoveL(across)
         self.cup_tool(OPEN)
 
 def main():
@@ -380,9 +379,9 @@ def main():
     machine.scrape_filter(scraper_height)
     machine.tamp_filter(tamp_height)
     machine.insert_filter_silvia()
-    # machine.cup_from_stack()
-    # machine.place_cup(height)
-    # machine.turn_on_silvia(time)
+    machine.cup_from_stack()
+    machine.place_cup(height)
+    machine.turn_on_silvia(time)
     machine.pickup_coffee(height)
 
 
