@@ -98,19 +98,19 @@ class CoffeeMachine(object):
 
     def turn_on_grinder(self):
         self.log("\n" + STRIP * "-" + " Turn on grinder " + "-" * STRIP)
-        self.MoveJ(self.frames[HOME])
+        # self.MoveJ(self.joint_angles[FILTER + ENTRY], "Filter entry point")   # For testing collisions
         self.tool_mount(GRINDER, True)
-        # self.MoveJ(self.joint_angles[GRINDERMOUNT], GRINDERMOUNT)
+        # self.MoveJ(self.joint_angles[GRINDERMOUNT], GRINDERMOUNT)  # For testing
 
         # Move to button
         global2on = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + GRINDERPOWERON] \
             * self.frames[PUSHER + TOOL] * self.frames[TOOL + TCP]
         release = global2on * rdk.transl(0, 0, -10)
         push = global2on * rdk.transl(0, 0, 7)
-        # intermediate_point = rdk.rotz() * self.frames[GLOBAL + GRINDERMOUNT]
+        intermediate_point = rdk.rotz(0.9) * self.frames[GLOBAL + GRINDERMOUNT]
 
         # TODO: Improve movement so stays inside perimeter
-        # self.MoveJ(intermediate_point, "Avoid tools")
+        self.MoveJ(intermediate_point, "Avoid silvia and cups")
         self.MoveJ(self.joint_angles[GRINDERPOWERON], "Move to on button")
         self.MoveJ(release, "Move to on button")
         self.MoveL(push, "Push on button")
@@ -127,7 +127,7 @@ class CoffeeMachine(object):
         self.MoveJ(release, "Move to off button")
         self.MoveL(push, "Push off button")
         self.MoveJ(release, "Release off button")
-        self.MoveJ(intermediate_point, "Avoid grinder")
+        self.MoveJ(intermediate_point, "Move away from grinder ready for lever movement")
 
     def pull_lever_multiple(self, n_pulls):
         self.log("\n" + STRIP * "-" + " Pull lever " + "-" * STRIP)
@@ -151,19 +151,21 @@ class CoffeeMachine(object):
             machine.MoveJ(mid_pull, "Pull grinder lever")
             machine.MoveJ(global2start, "Move to lever")
 
+        # TODO: Check angles
         self.MoveJ(self.joint_angles[GRINDER + LEVER], "Correct joint angles")
         for i in range(n_pulls):
+            self.log("Lever pull # " + str(i))
             pull(self)
             if i < n_pulls - 1:
                 release(self)
 
         self.MoveJ(exit_pos, "Release lever")
         self.tool_mount(GRINDER, False)
-        self.MoveJ(self.frames[HOME])
+        # self.MoveJ(self.frames[HOME])
 
     def scrape_filter(self, scraper_height):
         self.log("\n" + STRIP * "-" + " Scrape coffee from filter " + "-" * STRIP)
-        self.MoveJ(self.frames[HOME])
+        # self.MoveJ(self.frames[HOME])
 
         self.MoveJ(self.joint_angles[FILTER + ENTRY], "filter entry")
         self.tool_mount(FILTER, True, GRINDER)
@@ -217,7 +219,7 @@ class CoffeeMachine(object):
 
         self.MoveJ(intermediate)
         self.MoveL(entry, "Filter to silvia")
-        rdk.pause(15)
+        rdk.pause(15)   # For Rodney to remove filter tool and insert into machine
 
         # avoid_silvia = rdk.rotz(HALFPI) * self.frames[GLOBAL + CUPMOUNT]
         avoid_silvia_joints = [-88.986265, -77.001952, -78.888716, -114.109332, 90.000000, -178.986265]
@@ -361,16 +363,16 @@ def main():
     tamp_height = 15  # TODO: Test
     machine.robot.setPoseTool(machine.master_tool)
 
-    # machine.insert_filter_grinder()
-    # machine.turn_on_grinder()
-    # machine.pull_lever_multiple(N)
-    # machine.scrape_filter(scraper_height)
-    # machine.tamp_filter(tamp_height)
-    # machine.insert_filter_silvia()
-    # machine.cup_from_stack()
-    # machine.place_cup(height)
-    # machine.turn_on_silvia(time)
-    # machine.pickup_coffee(height)
+    machine.insert_filter_grinder()
+    machine.turn_on_grinder()
+    machine.pull_lever_multiple(N)
+    machine.scrape_filter(scraper_height)
+    machine.tamp_filter(tamp_height)
+    machine.insert_filter_silvia()
+    machine.cup_from_stack()
+    machine.place_cup(height)
+    machine.turn_on_silvia(time)
+    machine.pickup_coffee(height)
 
 
 main()
