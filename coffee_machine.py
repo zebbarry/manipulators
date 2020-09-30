@@ -80,6 +80,7 @@ class CoffeeMachine(object):
     def insert_filter_grinder(self):
         self.log("\n" + STRIP * "-" + " Insert filter in grinder " + "-" * STRIP)
         self.MoveJ(self.frames[HOME], HOME)
+
         # global2ball = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + BALL]  # * rdk.roty(0.1309)
         self.frames[GLOBAL+FILTER+ENTRY] = self.frames[GLOBAL+FILTER] * self.frames[TCP + TOOL] * \
             self.frames[TOOL + FILTER] * rdk.roty(-0.04) * rdk.transl(-2, 0, 0) \
@@ -89,11 +90,11 @@ class CoffeeMachine(object):
 
         self.tool_mount(FILTER, True)
         self.MoveJ(rdk.rotz(HALFPI) * self.frames[GLOBAL + FILTERMOUNT], "Intermediate point")
-        self.MoveJ(self.joint_angles["filterentry"], "Filter entry point")
+        self.MoveJ(self.joint_angles[FILTER + ENTRY], "Filter entry point")
         # self.MoveJ(filter_over_ball)
-        self.MoveL(self.frames[GLOBAL+FILTER+ENTRY], "Insert filter")
+        self.MoveL(self.frames[GLOBAL + FILTER + ENTRY], "Insert filter")
         self.tool_mount(FILTER, False, GRINDER)
-        # self.MoveJ(self.joint_angles["filterentry"], "filter entry")
+        self.MoveJ(self.joint_angles[FILTER + ENTRY], "Filter entry point")
 
     def turn_on_grinder(self):
         self.log("\n" + STRIP * "-" + " Turn on grinder " + "-" * STRIP)
@@ -167,7 +168,7 @@ class CoffeeMachine(object):
         self.MoveJ(self.joint_angles[FILTER + ENTRY], "filter entry")
         self.tool_mount(FILTER, True, GRINDER)
 
-        lift_off_ball = self.frames[GLOBAL+FILTER+ENTRY]
+        lift_off_ball = self.frames[GLOBAL + FILTER + ENTRY]
         pull_out = lift_off_ball * rdk.transl(0, 0, -70)
         # level = pull_out * self.frames[TCP + TOOL] * rdk.roty(0.1) \
         #     * self.frames[TOOL + TCP]
@@ -207,7 +208,7 @@ class CoffeeMachine(object):
 
     def insert_filter_silvia(self):
         self.log("\n" + STRIP * "-" + " Move filter to silvia " + "-" * STRIP)
-        # self.MoveJ(self.joint_angles[TAMPER + ENTRY], "Move to tamper")  # For testing
+        self.MoveJ(self.joint_angles[TAMPER + ENTRY], "Move to tamper")  # For testing
         intermediate = rdk.rotz(-1.5) * self.frames[GLOBAL + CROSS] * self.frames[CROSS + TAMPER] * \
             rdk.transl(70, 0, -100) * self.frames[TAMPER + FILTER] * self.frames[FILTER + TOOL] \
             * self.frames[TOOL + TCP]
@@ -218,6 +219,9 @@ class CoffeeMachine(object):
         self.MoveL(entry, "Filter to silvia")
         rdk.pause(15)
         # TODO: Move to home or cupstack once completed
+        avoid_silvia = rdk.rotz(HALFPI) * self.frames[GLOBAL + CUPMOUNT]
+        self.MoveJ(avoid_silvia, "Avoid silvia")
+        # self.MoveJ(self.frames[HOME], HOME)
 
     def cup_from_stack(self):
         self.log("\n" + STRIP * "-" + " Get cup from stack " + "-" * STRIP)
@@ -245,10 +249,11 @@ class CoffeeMachine(object):
 
         remove_cup = rdk.transl(0, 0, 300) * cup_pickup_matrix
         self.MoveL(remove_cup, "Remove cup")
-        self.MoveJ(self.joint_angles["rotated"+CUP], "Rotate cup")
+        self.MoveJ(self.joint_angles["rotated" + CUP], "Rotate cup")
 
     def place_cup(self, height):
         self.log('\n' + STRIP * '-' + ' Cup to Silvia ' + '-' * STRIP)
+        # TODO: Check that doesnt crash into coffee machine after cup_from_stack
 
         end_point = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 7, 0) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
@@ -307,6 +312,8 @@ class CoffeeMachine(object):
 
         out = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 50, -150) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
+        # TODO: Check that doesnt crash into coffee machine from pickup tool
+
         # self.MoveJ(self.joint_angles['goodluck'], 'CupEntry')
         # rdk.pause(5)
         # self.MoveJ(self.joint_angles['pickupcoffee'])
