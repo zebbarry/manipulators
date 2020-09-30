@@ -70,7 +70,8 @@ class CoffeeMachine(object):
         name = func + operation + " (" + location.capitalize() + ")"
         self.log("Tool Mount Operation - Tool: {}, Operation:{}".format(name, operation))
         self.RDK.RunProgram(name, True)
-        self.robot.setPoseTool(self.master_tool)
+        if func == CUPFUNC:
+            self.robot.setPoseTool(self.master_tool)
 
     def cup_tool(self, operation):
         name = CUPFUNC + operation
@@ -326,7 +327,7 @@ class CoffeeMachine(object):
         self.MoveJ(inter)
         self.cup_tool(OPEN)
         self.MoveJ(end_point)
-        rdk.pause(3)
+
         self.cup_tool(CLOSE)
         self.MoveJ(inter)
         self.MoveJ(out)
@@ -334,7 +335,7 @@ class CoffeeMachine(object):
         across = rdk.transl(-100, 0, 0) * up
         self.MoveL(up)
         # self.MoveL(across)
-        self.cup_tool(OPEN)
+        # self.cup_tool(OPEN)
 
 def main():
     # Read transformation matrices from file
@@ -365,8 +366,8 @@ def main():
     # Run subprograms
 
     N = 3  # amount of times leaver needs to be pulled
-    height = 80  # cup height
-    time = 3    # TODO: Set to 12s for actual test
+    height = 98  # cup height
+    time = 12    # TODO: Set to 12s for actual test
     scraper_height = 8  # TODO: think works but not sure
     tamp_height = 15  # TODO: Test
     machine.robot.setPoseTool(machine.master_tool)
