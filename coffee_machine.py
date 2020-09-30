@@ -264,14 +264,14 @@ class CoffeeMachine(object):
             * rdk.transl(height, 50, -150) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
 
         # self.MoveJ(self.joint_angles['cupentry'], 'CupEntry')
-        self.MoveJ(out)
-        self.MoveJ(inter)
-        self.MoveJ(end_point, 'Cup entry')
+        self.MoveJ(out, "Move inline with filter")
+        self.MoveJ(inter, "Intermediate point")
+        self.MoveJ(end_point, "Move cup to underneath filter")
         self.cup_tool(OPEN)
 
-        self.MoveJ(inter)
+        self.MoveJ(inter, "Intermediate point")
         self.cup_tool(CLOSE)
-        self.MoveJ(out)
+        self.MoveJ(out, "Remove tool from machine")
         self.tool_mount(CUP, False)
 
     def turn_on_silvia(self, time):
@@ -286,16 +286,17 @@ class CoffeeMachine(object):
         off = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + SILVIAPOWEROFF] \
             * self.frames[PUSHER + TOOL] * self.frames[TOOL + TCP]
         intermediate_point = rdk.transl(120, 100, 0) * on
+        pushOn = on * rdk.transl(0, 0, 6)
+        pushOff = off * rdk.transl(0, 0, 6)
+
         self.MoveJ(intermediate_point, "Avoid tools")
         self.MoveJ(on, "Move to button")
-        pushOn = on * rdk.transl(0, 0, 6)
         self.MoveL(pushOn, "Push button")
         self.MoveJ(on, "Release")
 
         rdk.pause(time)
 
         self.MoveJ(off, "Move to off")
-        pushOff = off * rdk.transl(0, 0, 6)
         self.MoveL(pushOff, "Push button")
         self.MoveJ(off, "Release")
         self.MoveJ(intermediate_point, "Avoid tools")
@@ -315,22 +316,22 @@ class CoffeeMachine(object):
         out = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 60, -180) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
 
-        self.MoveJ(out, 'Cup entry')
-        self.MoveJ(inter)
+        self.MoveJ(out, "Cup entry point")
+        self.MoveJ(inter, "Intermediate point")
         self.cup_tool(OPEN)
-        self.MoveJ(end_point)
+        self.MoveJ(end_point, "Move to cup")
         self.cup_tool(CLOSE)
-        self.MoveJ(inter)
-        self.MoveJ(out)
+        self.MoveJ(inter, "Intermediate point")
+        self.MoveJ(out, "Remove cup")
 
         up = rdk.transl(0, 0, 350) * out
         down = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP+"place"] \
             * rdk.transl(height-10, 0, 0) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
         over_silvia = rdk.transl(0, 0, 50) * down
 
-        self.MoveL(up)
-        self.MoveJ(over_silvia)
-        self.MoveJ(down)
+        self.MoveL(up, "Lift cup up")
+        self.MoveJ(over_silvia, "Position over silvia")
+        self.MoveJ(down, "Place cup down")
         self.cup_tool(OPEN)
 
 
