@@ -365,8 +365,8 @@ def main():
     N = 3  # amount of times leaver needs to be pulled
     height = 98  # cup height
     time = 12    # TODO: Set to 12s for actual test
-    scraper_height = 8  # TODO: think works but not sure
-    tamp_height = 15  # TODO: Test
+    scraper_height = 8
+    tamp_height = 15
     machine.robot.setPoseTool(machine.master_tool)
 
     # machine.insert_filter_grinder()
