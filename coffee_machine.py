@@ -104,7 +104,7 @@ class CoffeeMachine(object):
         # self.MoveJ(self.joint_angles[GRINDERMOUNT], GRINDERMOUNT)  # For testing
 
         # Move to button
-        global2on = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + GRINDERPOWERON] \
+        global2on = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + GRINDERPOWERON] * rdk.rotz(PI)\
             * self.frames[PUSHER + TOOL] * self.frames[TOOL + TCP]
         release = global2on * rdk.transl(0, 0, -10)
         push = global2on * rdk.transl(0, 0, 7)
@@ -118,11 +118,11 @@ class CoffeeMachine(object):
         rdk.pause(3)
 
         # Move back
-        global2off = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + GRINDERPOWEROFF] \
+        global2off = self.frames[GLOBAL + GRINDER] * self.frames[GRINDER + GRINDERPOWEROFF] * rdk.rotz(PI) \
             * self.frames[PUSHER + TOOL] * self.frames[TOOL + TCP]
         release = global2off * rdk.transl(0, 0, -10)
         push = global2off * rdk.transl(0, 0, 7)
-        intermediate_point = rdk.transl(-10, -10, 30) * release
+        intermediate_point = rdk.transl(-50, -40, 30) * release
 
         self.MoveJ(release, "Move to off button")
         self.MoveL(push, "Push off button")
@@ -370,15 +370,15 @@ def main():
     machine.robot.setPoseTool(machine.master_tool)
 
     # machine.insert_filter_grinder()
-    # machine.turn_on_grinder()
-    # machine.pull_lever_multiple(N)
+    machine.turn_on_grinder()
+    machine.pull_lever_multiple(N)
     # machine.scrape_filter(scraper_height)
     # machine.tamp_filter(tamp_height)
     # machine.insert_filter_silvia()
     # machine.cup_from_stack()
     # machine.place_cup(height)
     # machine.turn_on_silvia(time)
-    machine.pickup_coffee(height)
+    # machine.pickup_coffee(height)
 
 
 main()
