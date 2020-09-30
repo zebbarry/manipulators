@@ -364,7 +364,7 @@ def main():
 
     N = 3  # amount of times leaver needs to be pulled
     height = 98  # cup height
-    time = 12    # TODO: Set to 12s for actual test
+    time = 12
     scraper_height = 8
     tamp_height = 15
     machine.robot.setPoseTool(machine.master_tool)
