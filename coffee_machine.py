@@ -254,7 +254,6 @@ class CoffeeMachine(object):
 
     def place_cup(self, height):
         self.log('\n' + STRIP * '-' + ' Cup to Silvia ' + '-' * STRIP)
-        # TODO: Check that doesnt crash into coffee machine after cup_from_stack
 
         end_point = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 7, 0) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
@@ -268,7 +267,6 @@ class CoffeeMachine(object):
         self.MoveJ(out)
         self.MoveJ(inter)
         self.MoveJ(end_point, 'Cup entry')
-        rdk.pause(2)
         self.cup_tool(OPEN)
 
         self.MoveJ(inter)
@@ -316,13 +314,7 @@ class CoffeeMachine(object):
 
         out = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 60, -180) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
-        # TODO: Check that doesnt crash into coffee machine from pickup tool
 
-        # self.MoveJ(self.joint_angles['goodluck'], 'CupEntry')
-        # rdk.pause(5)
-        # self.MoveJ(self.joint_angles['pickupcoffee'])
-
-        # self.MoveJ(self.joint_angles['ha'])
         self.MoveJ(out, 'Cup entry')
         self.MoveJ(inter)
         self.cup_tool(OPEN)
@@ -332,10 +324,11 @@ class CoffeeMachine(object):
         self.MoveJ(inter)
         self.MoveJ(out)
         up = rdk.transl(0, 0, 300) * out
-        across = rdk.transl(-100, 0, 0) * up
         self.MoveL(up)
+        # across = rdk.transl(-100, 0, 0) * up
         # self.MoveL(across)
         # self.cup_tool(OPEN)
+
 
 def main():
     # Read transformation matrices from file
