@@ -218,15 +218,15 @@ class CoffeeMachine(object):
         self.MoveJ(intermediate)
         self.MoveL(entry, "Filter to silvia")
         rdk.pause(15)
-        # TODO: Move to home or cupstack once completed
-        avoid_silvia = rdk.rotz(HALFPI) * self.frames[GLOBAL + CUPMOUNT]
-        self.MoveJ(avoid_silvia, "Avoid silvia")
-        # self.MoveJ(self.frames[HOME], HOME)
+
+        # avoid_silvia = rdk.rotz(HALFPI) * self.frames[GLOBAL + CUPMOUNT]
+        avoid_silvia_joints = [-88.986265, -77.001952, -78.888716, -114.109332, 90.000000, -178.986265]
+        # self.MoveJ(avoid_silvia, "Avoid silvia")
+        self.MoveJ(avoid_silvia_joints, "Avoid silvia")
+        self.MoveJ(self.joint_angles[CUPMOUNT])
 
     def cup_from_stack(self):
         self.log("\n" + STRIP * "-" + " Get cup from stack " + "-" * STRIP)
-        # TODO: Compare start with finish of insert_filter_silvia() to compare
-        # self.MoveJ(self.frames[HOME], HOME)
         self.tool_mount(CUP, True)
         # self.MoveJ(self.joint_angles[CUPMOUNT])   # For testing
 
@@ -367,10 +367,10 @@ def main():
     # machine.scrape_filter(scraper_height)
     # machine.tamp_filter(tamp_height)
     # machine.insert_filter_silvia()
-    machine.cup_from_stack()
-    machine.place_cup(height)
-    machine.turn_on_silvia(time)
-    machine.pickup_coffee(height)
+    # machine.cup_from_stack()
+    # machine.place_cup(height)
+    # machine.turn_on_silvia(time)
+    # machine.pickup_coffee(height)
 
 
 main()
