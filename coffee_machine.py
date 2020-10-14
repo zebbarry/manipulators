@@ -1,14 +1,13 @@
-# Type help("robolink") or help("robodk") for more information
-# Press F5 to run the script
+# Program for controlling a UR5 collaborative robot to make a coffee
+# Read joint angle configurations and transformation matrices from separate CSV files
+# Authors: Zeb Barry, Jack Zarifeh
+# Date: 14th October 2020
 # Documentation: https://robodk.com/doc/en/RoboDK-API.html
 # Reference:     https://robodk.com/doc/en/PythonAPI/index.html
-# Note: It is not required to keep a copy of this file, your python script is saved with the station
 import robolink as rl  # RoboDK API
 import robodk as rdk  # Robot toolbox
 import datetime
-from reference_frames import *
 
-COMMAND_WAIT = 15
 STRIP = 10
 HALFPI = 1.570796326794897
 PI = HALFPI * 2
@@ -22,9 +21,82 @@ STAND = "Stand"
 OPEN = " Open"
 CLOSE = " Close"
 HOME = "Home"
+GLOBAL = "global"
+SILVIA = "silvia"
+GRINDER = "grinder"
+CUPSTACK = "cupstack"
+CUP = "cup"
+CROSS = "cross"
+TCP = "tcp"
+TOOL = "tool"
+PUSHER = "pusher"
+PULLER = "puller"
+LEVER = "lever"
+GRINDERMOUNT = "grindermount"
+FILTERMOUNT = "filtermount"
+CUPMOUNT = "cupmount"
+FILTER = "filter"
+SCRAPER = "scraper"
+TAMPER = "tamper"
+BALL = "ball"
+ENTRY = "entry"
+SILVIAPOWERON = "silviapoweron"
+SILVIAPOWEROFF = "silviapoweroff"
+GRINDERPOWERON = "grinderpoweron"
+GRINDERPOWEROFF = "grinderpoweroff"
+
+
+def read_frames(filename):
+    """ Read transformation matrices from CSV file and convert into dictionary of RoboDK matrices.
+    filename: file path to CSV file
+    output: dictionary of transformation matrices where key is a string
+     composed of the first frame and second frame titles
+    """
+    # Open file
+    file = open(filename, "r")
+    lines = file.readlines()
+    file.close()
+
+    # Read each line of file and convert into RoboDK matrix
+    frames = {}
+    for line in lines:
+        segments = line.rstrip().split(",")
+        name = segments[0]
+        values = [float(i) for i in segments[1:]]
+        # CSV file is formatted as each row sequentially separated by ','
+        transform = rdk.Mat([values[0:4],
+                             values[4:8],
+                             values[8:12],
+                             values[12:16]])
+        frames[name] = transform
+    return frames
+
+
+def read_joint_angles(filename):
+    """ Read joint angles from CSV file and convert into dictionary of RoboDK matrices.
+    filename: file path to CSV file
+    output: dictionary of joint angles  where key describing the final pose
+    """
+    # Open file
+    file = open(filename, "r")
+    lines = file.readlines()
+    file.close()
+
+    # Read each line of file and convert into RoboDK matrix
+    joint_angles = {}
+    for line in lines:
+        segments = line.rstrip().split(",")
+        name = segments[0]
+        values = [float(i) for i in segments[1:]]
+        angles = rdk.Mat(values)
+        joint_angles[name] = angles
+    return joint_angles
 
 
 class CoffeeMachine(object):
+    """ Class definition for coffee machine object, contains all methods for completing tasks
+    as well as logging results.
+    """
 
     def __init__(self, robot, master_tool, RDK, frames, joint_angles, log_filename="~/log.txt"):
         self.robot = robot
@@ -33,25 +105,44 @@ class CoffeeMachine(object):
         self.joint_angles = joint_angles
         self.RDK = RDK
         self.log_filename = log_filename
+
+        # Open log file and write current date and time
         self.log_file = open(self.log_filename, "a")
         self.log("\n\n")
         self.log(datetime.datetime.now().ctime())
 
     def log(self, message):
+        """ Write message to log file
+        message: message as a string
+        """
         self.log_file.write(message + "\n")
 
     def close_log(self):
+        """ Close log file """
         self.log_file.close()
 
     def MoveJ(self, matrix, pos=""):
+        """ Perform joint move to new position and write message to log
+        matrix: Either transform matrix describing TCP in global frame or joint angle configuration
+        pos: message to be written to log file describing movement
+        """
         self.robot.MoveJ(matrix)
         self.log("Joint move to new position: {}".format(pos))
 
     def MoveL(self, matrix, pos=""):
+        """ Perform linear move to new position and write message to log
+        matrix: Either transform matrix describing TCP in global frame or joint angle configuration
+        pos: message to be written to log file describing movement
+        """
         self.robot.MoveL(matrix)
         self.log("Linear move to new position: {}".format(pos))
 
     def tool_mount(self, name, pickup=True, location=STAND):
+        """ General function for moving to and attaching/detaching tools.
+        name: name of tool as string
+        pickup: boolean to determine whether to attach (True) or detach (False) tool
+        location: location of tool as string, options are tool stand or grinder"""
+        # Determine which tool to use
         if name == GRINDER:
             mount = GRINDERMOUNT
             func = GRINDERFUNC
@@ -62,11 +153,14 @@ class CoffeeMachine(object):
             mount = CUPMOUNT
             func = CUPFUNC
 
+        # If tool is at stand move to position, for grinder location tool must already be in position
         if location == STAND:
             self.MoveJ(self.joint_angles[mount], mount)
             # self.MoveJ(self.frames[GLOBAL + mount], mount)    # Not needed as joint angles already calculated.
 
+        # Determine if attaching or detaching tool
         operation = ATTACH if pickup else DETACH
+        # Create string function name
         name = func + operation + " (" + location.capitalize() + ")"
         self.log("Tool Mount Operation - Tool: {}, Operation:{}".format(name, operation))
         self.RDK.RunProgram(name, True)
@@ -164,19 +258,15 @@ class CoffeeMachine(object):
 
     def scrape_filter(self, scraper_height):
         self.log("\n" + STRIP * "-" + " Scrape coffee from filter " + "-" * STRIP)
-        # self.MoveJ(self.frames[HOME])
 
         self.MoveJ(self.joint_angles[FILTER + ENTRY], "filter entry")
         self.tool_mount(FILTER, True, GRINDER)
 
         lift_off_ball = self.frames[GLOBAL + FILTER + ENTRY]
         pull_out = lift_off_ball * rdk.transl(0, 0, -70)
-        # level = pull_out * self.frames[TCP + TOOL] * rdk.roty(0.1) \
-        #     * self.frames[TOOL + TCP]
 
         self.MoveL(lift_off_ball, "Lift off ball")
         self.MoveL(pull_out, "Pull out filter")
-        # self.MoveJ(level, "Level out filter")
 
         global2scraper = self.frames[GLOBAL + CROSS] * self.frames[CROSS + SCRAPER] * rdk.transl(scraper_height, 0, 0)
         start = global2scraper * rdk.transl(0, 0, -60) * self.frames[SCRAPER + FILTER] \
@@ -365,21 +455,21 @@ def main():
 
     N = 3  # amount of times leaver needs to be pulled
     height = 98  # cup height
-    time = 12
+    time = 12    # Duration to press coffee machine button for
     scraper_height = 8
     tamp_height = 15
     machine.robot.setPoseTool(machine.master_tool)
 
-    # machine.insert_filter_grinder()
+    machine.insert_filter_grinder()
     machine.turn_on_grinder()
     machine.pull_lever_multiple(N)
-    # machine.scrape_filter(scraper_height)
-    # machine.tamp_filter(tamp_height)
-    # machine.insert_filter_silvia()
-    # machine.cup_from_stack()
-    # machine.place_cup(height)
-    # machine.turn_on_silvia(time)
-    # machine.pickup_coffee(height)
+    machine.scrape_filter(scraper_height)
+    machine.tamp_filter(tamp_height)
+    machine.insert_filter_silvia()
+    machine.cup_from_stack()
+    machine.place_cup(height)
+    machine.turn_on_silvia(time)
+    machine.pickup_coffee(height)
 
 
 main()
