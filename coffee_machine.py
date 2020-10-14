@@ -355,112 +355,147 @@ class CoffeeMachine(object):
         self.MoveJ(self.joint_angles[CUPMOUNT])
 
     def cup_from_stack(self):
+        """ Function that picks up a cup from the cup from the stack
+        """
         self.log("\n" + STRIP * "-" + " Get cup from stack " + "-" * STRIP)
+        # Attach cup tool
         self.tool_mount(CUP, True)
-        # self.MoveJ(self.joint_angles[CUPMOUNT])   # For testing
-
+        # Position at the centre of the top cup
         cup_pickup_matrix = self.frames[GLOBAL + CUPSTACK] * self.frames[CUPSTACK + CUP] \
             * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
+        # Used to avoid other tools when coming from the tool mount
         rotate_90 = rdk.rotz(HALFPI) * self.frames[GLOBAL+CUPMOUNT]
+        # Puts the robot in the correct orientation to pick up a cup
         intermediate = rdk.transl(0, 0, 150) * self.frames[GLOBAL + CUPSTACK] * self.frames[CUPSTACK + CUP] \
             * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
-
+        # Move operations
         self.MoveJ(rotate_90, "Move to stack")  # Avoid other tools
         self.MoveJ(self.joint_angles[CUPSTACK + ENTRY], "Move to correct orientation")  # get correct orientation
         self.MoveJ(intermediate)
-
+        # Point to move the cup tool up to the top cup
         before_cup = rdk.transl(0, 100, 0) * cup_pickup_matrix
+        # Move operation
         self.MoveL(before_cup, "Move to cup level")
+        # Open cup tool
         self.cup_tool(OPEN)
-
+        # Linear move to grab a cup!
         self.MoveL(cup_pickup_matrix, "Slide to cup edge")
+        # Close cup tool
         self.cup_tool(CLOSE)
-
+        # Point that moves the cup away from the stack
         remove_cup = rdk.transl(0, 0, 300) * cup_pickup_matrix
+        # Move operations
         self.MoveL(remove_cup, "Remove cup")
         self.MoveJ(self.joint_angles["rotated" + CUP], "Rotate cup")
 
     def place_cup(self, height):
+        """ Function to place the coffee cup under the coffee CoffeeMachine
+        height: varibale used to adjust the height of the cup tool above tamp
+        drip tray of the coffee machine
+        """
         self.log('\n' + STRIP * '-' + ' Cup to Silvia ' + '-' * STRIP)
-
+        # Point that defines pick up location of the cup
         end_point = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 7, 0) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
-
+        # Stand off position to allow for the cup tool to be opened.
         inter = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 15, -100) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
+        # Position further out from the stand off position to ensure that that
+        # the tool does not hit the porta filter.
         out = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 50, -150) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
 
-        # self.MoveJ(self.joint_angles['cupentry'], 'CupEntry')
+        # Move operations
         self.MoveJ(out, "Move inline with filter")
         self.MoveJ(inter, "Intermediate point")
         self.MoveJ(end_point, "Move cup to underneath filter")
+        # Open cup tool
         self.cup_tool(OPEN)
-
+        # Move operations
         self.MoveJ(inter, "Intermediate point")
         self.cup_tool(CLOSE)
         self.MoveJ(out, "Remove tool from machine")
+        # Close cup tool
         self.tool_mount(CUP, False)
 
     def turn_on_silvia(self, time):
+        """ Function used to turn the coffee machine on and off to dispense
+        coffee into the cup
+        time: the time that the coffee machine will be turned on for
+        """
         self.log("\n" + STRIP * "-" + " Turn on coffee machine " + "-" * STRIP)
-
+        # Attach the grinder tool
         self.tool_mount(GRINDER, True)
-        # self.MoveJ(self.joint_angles[GRINDERMOUNT], GRINDERMOUNT)
 
         # Move to button
+        # Position for the on button
         on = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + SILVIAPOWERON] \
             * self.frames[PUSHER + TOOL] * self.frames[TOOL + TCP]
+        # Position for the off button
         off = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + SILVIAPOWEROFF] \
             * self.frames[PUSHER + TOOL] * self.frames[TOOL + TCP]
+        # Intermidiate point that was used to avoid the other tools on the way to the coffee machin
         intermediate_point = rdk.transl(120, 100, 0) * on
+        # Z translations to push the buttons
         pushOn = on * rdk.transl(0, 0, 6)
         pushOff = off * rdk.transl(0, 0, 6)
-
+        # Move operations
         self.MoveJ(intermediate_point, "Avoid tools")
         self.MoveJ(on, "Move to button")
         self.MoveL(pushOn, "Push button")
         self.MoveJ(on, "Release")
-
+        # Pause for set time to allow coffee to be made
         rdk.pause(time)
-
+        # Move operations
         self.MoveJ(off, "Move to off")
         self.MoveL(pushOff, "Push button")
         self.MoveJ(off, "Release")
         self.MoveJ(intermediate_point, "Avoid tools")
+        # Detach the grinder tool
         self.tool_mount(GRINDER, False)
 
     def pickup_coffee(self, height):
-        self.log('\n' + STRIP * '-' + ' Cup to Rodney ' + '-' * STRIP)
-        self.tool_mount(CUP, True)
-        # self.MoveJ(self.joint_angles[CUPMOUNT])  # For testing
+        """ Function to pick up the coffee cup after it has been filled with CoffeeMachine
+        height: adjusts the height of the cup tool from the surface of the drip tray
+        """
 
+        self.log('\n' + STRIP * '-' + ' Cup to Rodney ' + '-' * STRIP)
+        # Attach the cup tool
+        self.tool_mount(CUP, True)
+
+        # Define the end position that picks up the coffee cup
         end_point = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 7, 0) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
-
+        # Stand off point next to the coffee machine.
         inter = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 15, -100) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
-
+        # Position further away from the coffee machine to avoid hitting the portafilter in simulation.
         out = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP] \
             * rdk.transl(height, 60, -180) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
-
+        # Move operations
         self.MoveJ(out, "Cup entry point")
         self.MoveJ(inter, "Intermediate point")
+        # Open Cup tool
         self.cup_tool(OPEN)
         self.MoveJ(end_point, "Move to cup")
+        # Close cup tool
         self.cup_tool(CLOSE)
         self.MoveJ(inter, "Intermediate point")
         self.MoveJ(out, "Remove cup")
-
+        # Position to move the cup up to get above the coffee machine
         up = rdk.transl(0, 0, 350) * out
+        # Position to move the cup over to the centre of the coffee machine
+        over_silvia = rdk.transl(0, 0, 50) * down
+        # Position to lower the cup down onto the coffee machine
         down = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP+"place"] \
             * rdk.transl(height-10, 0, 0) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
-        over_silvia = rdk.transl(0, 0, 50) * down
-
+        # Move operations
         self.MoveL(up, "Lift cup up")
         self.MoveJ(over_silvia, "Position over silvia")
         self.MoveJ(down, "Place cup down")
+        # Open cup tool
         self.cup_tool(OPEN)
+        # Finished!
 
 
 def main():
