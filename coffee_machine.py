@@ -484,11 +484,11 @@ class CoffeeMachine(object):
         self.MoveJ(out, "Remove cup")
         # Position to move the cup up to get above the coffee machine
         up = rdk.transl(0, 0, 350) * out
-        # Position to move the cup over to the centre of the coffee machine
-        over_silvia = rdk.transl(0, 0, 50) * down
         # Position to lower the cup down onto the coffee machine
         down = self.frames[GLOBAL + SILVIA] * self.frames[SILVIA + CUP+"place"] \
             * rdk.transl(height-10, 0, 0) * self.frames[CUP + TOOL] * self.frames[TOOL + TCP]
+        # Position to move the cup over to the centre of the coffee machine
+        over_silvia = rdk.transl(0, 0, 50) * down
         # Move operations
         self.MoveL(up, "Lift cup up")
         self.MoveJ(over_silvia, "Position over silvia")
